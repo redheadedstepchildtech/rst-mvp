@@ -1,14 +1,14 @@
 import { PrismaClient } from "@prisma/client";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
 export async function POST(
-  req: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
 ) {
-  const id = params.id;
-  const body = await req.json();
+  const { id } = await context.params;
+  const body = await request.json();
 
   const {
     amount,
