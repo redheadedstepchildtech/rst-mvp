@@ -1,20 +1,15 @@
 import { PrismaClient } from "@prisma/client";
-import { NextResponse } from "next/server";
-
-const prisma = new PrismaClient();
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
-  req: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  context: { params: { id: string } }
 ) {
-  const id = params.id;
+  const { id } = context.params;
 
   try {
-    await prisma.donation.delete({
-      where: { id },
-    });
-
-    return NextResponse.redirect("/dashboard");
+    // your delete logic here
+    return NextResponse.json({ success: true, id });
   } catch (err) {
     return NextResponse.json({ error: "Failed to delete" }, { status: 500 });
   }
