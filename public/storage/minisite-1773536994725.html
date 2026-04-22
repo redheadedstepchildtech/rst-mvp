@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dave Reynolds – Support Page</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      color: #222;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+      margin-top: 0;
+      font-size: 2rem;
+      text-align: center;
+      color: #333;
+    }
+
+    h2 {
+      margin-top: 24px;
+      font-size: 1.3rem;
+      color: #333;
+    }
+
+    .photo {
+      width: 100%;
+      border-radius: 12px;
+      margin: 20px 0;
+      object-fit: cover;
+    }
+
+    .story {
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+      white-space: pre-line;
+    }
+
+    .amount-box {
+      background: #e8f3ff;
+      border-left: 5px solid #1e73ff;
+      padding: 12px 16px;
+      margin-bottom: 24px;
+      border-radius: 6px;
+      font-size: 1.1rem;
+    }
+
+    .qr {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .qr img {
+      width: 180px;
+      height: 180px;
+    }
+
+    .donation-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      text-align: center;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+    }
+
+    .cashapp { background: #00d632; }
+    .venmo { background: #3d95ce; }
+    .paypal { background: #003087; }
+    .other { background: #444; }
+
+    .btn:hover { opacity: 0.9; }
+
+    .needs-box {
+      background: #fffaf0;
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 20px;
+      border: 1px solid #f0e0b0;
+    }
+
+    .needs-box ul {
+      padding-left: 20px;
+      margin: 8px 0 0 0;
+    }
+
+    .contact-box {
+      background: #f0f7ff;
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 20px;
+      border: 1px solid #c8ddff;
+      font-size: 0.95rem;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 0.9rem;
+      color: #777;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="card">
+
+      <h1>{{name}}</h1>
+
+      <!-- Photo -->
+      <img src="https://uscptorb36ln2pcw.private.blob.vercel-storage.com/donation-1773536992107.jpg" alt="Photo" class="photo" />
+
+      <div class="story">
+        My daughters called the cops on me and I need a lawyer
+      </div>
+
+      <div class="amount-box">
+        <strong>Requested Support:</strong> $25
+      </div>
+
+      <!-- QR Code for Minisite -->
+      <div class="qr">
+        <p><strong>Scan to view this page:</strong></p>
+        <img src="{{qrMinisite}}" alt="QR Code for this page" />
+      </div>
+
+      <!--NEEDS_START-->
+      <div class="needs-box">
+        <h2>Other Needs</h2>
+        <ul>
+          {{needsList}}
+        </ul>
+      </div>
+      <!--NEEDS_END-->
+
+      <!--CONTACT_START-->
+      <div class="contact-box">
+        <h2>Contact Information</h2>
+        <p>
+          The person receiving help chose to share this contact info. Please be respectful and kind.
+        </p>
+        <ul>
+          {{contactEmail}}
+          <li>Email: <a href="mailto:{{contactEmail}}">{{contactEmail}}</a></li>
+          {{contactPhone}}
+          <li>Phone: <a href="tel:{{contactPhone}}">{{contactPhone}}</a></li>
+        </ul>
+      </div>
+      <!--CONTACT_END-->
+
+      <!-- Donation Buttons -->
+      <div class="donation-buttons">
+
+        <!--CASHAPP_START-->
+        <a class="btn cashapp" href="https://cash.app/" target="_blank">
+          Donate via Cash App
+        </a>
+        <div class="qr">
+          <img src="{{qrCashapp}}" alt="Cash App QR" />
+        </div>
+        <!--CASHAPP_END-->
+
+        <!--VENMO_START-->
+        <a class="btn venmo" href="https://venmo.com/" target="_blank">
+          Donate via Venmo
+        </a>
+        <div class="qr">
+          <img src="{{qrVenmo}}" alt="Venmo QR" />
+        </div>
+        <!--VENMO_END-->
+
+        <!--PAYPAL_START-->
+        <a class="btn paypal" href="" target="_blank">
+          Donate via PayPal
+        </a>
+        <div class="qr">
+          <img src="{{qrPaypal}}" alt="PayPal QR" />
+        </div>
+        <!--PAYPAL_END-->
+
+      </div>
+
+      <!-- Offer Help (non-monetary) -->
+      <div class="qr">
+        <p><strong>Want to offer items, time, housing, or other help?</strong></p>
+        <a class="btn other" href="{{offerHelpUrl}}" target="_blank">
+          Offer Help (Items, Time, Housing, Equipment)
+        </a>
+        <div class="qr">
+          <img src="{{qrOfferHelp}}" alt="Offer Help QR" />
+        </div>
+      </div>
+
+    </div>
+
+    <footer>
+      Generated with ❤️ by Redheaded Stepchild Tech
+    </footer>
+  </div>
+</body>
+</html>

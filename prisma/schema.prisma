@@ -1,0 +1,150 @@
+// ------------------------------------------------------
+//  Redheaded Stepchild Tech — Unified Need Model
+//  RST 2.0: Stories, Donations, Help Offers, Swap, etc.
+// ------------------------------------------------------
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+await prisma.partnerUpload.create({
+  data: {
+    needId,
+    partnerId,
+    fileUrl,
+    fileName,
+  }
+})
+
+//
+// ------------------------------------------------------
+//  USER MODEL (clean + fixed)
+// ------------------------------------------------------
+model User {
+  id        String  @id @default(cuid())
+  email     String  @unique
+  password  String
+  role      String  @default("helper") // admin, moderator, partner, helper
+  orgName   String?
+  name      String?
+  avatarUrl String?
+
+  partnerNotes   PartnerNote[]
+  partnerUploads PartnerUpload[]
+  boostHistory   BoostHistory[]
+
+  // Relations
+  needs        Need[]
+  partnerNeeds Need[]         @relation("PartnerNeeds")
+  partnerRules PartnerRules[] // ⭐ ADD THIS LINE
+
+  createdAt               DateTime                 @default(now())
+  notificationPreferences NotificationPreferences?
+}
+
+model PartnerNote {
+  id     String @id @default(cuid())
+  needId String
+  need   Need   @relation(fields: [needId], references: [id])
+
+  partnerId String
+  partner   User   @relation(fields: [partnerId], references: [id])
+
+  note      String
+  createdAt DateTime @default(now())
+}
+
+model PartnerUpload {
+  id     String @id @default(cuid())
+  needId String
+  need   Need   @relation(fields: [needId], references: [id])
+
+  partnerId String
+  partner   User   @relation(fields: [partnerId], references: [id])
+
+  fileUrl   String
+  fileName  String
+  createdAt DateTime @default(now())
+}
+
+model PartnerRules {
+  id        String @id @default(cuid())
+  partnerId String
+  partner   User   @relation(fields: [partnerId], references: [id])
+
+  categories String? // comma-separated
+  cities     String? // comma-separated
+
+  createdAt DateTime @default(now())
+}
+
+// ------------------------------------------------------
+//  NEED MODEL (clean + fixed)
+// ------------------------------------------------------
+model Need {
+  id            String    @id @default(cuid())
+  title         String
+  description   String?
+  category      String?
+  city          String?
+  state         String?
+  tags          String?
+  boostCount    Int       @default(0)
+  lastBoostedAt DateTime?
+  partnerId     String?
+  partner       User?     @relation("PartnerNeeds", fields: [partnerId], references: [id])
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // NEW RELATIONS
+  partnerNotes   PartnerNote[]
+  partnerUploads PartnerUpload[]
+  qrScans        QRScan[]
+  boostHistory   BoostHistory[]
+  user           User?           @relation(fields: [userId], references: [id])
+  userId         String?
+}
+
+model NotificationPreferences {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  notifyOnBoost  Boolean @default(true)
+  notifyOnCreate Boolean @default(true)
+  notifyOnVerify Boolean @default(true)
+
+  categoryFilter String?
+  cityFilter     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model QRScan {
+  id     String @id @default(cuid())
+  needId String
+  need   Need   @relation(fields: [needId], references: [id])
+
+  scannedAt DateTime @default(now())
+  userAgent String?
+  ipHash    String?
+  city      String?
+  state     String?
+  country   String?
+}
+
+model BoostHistory {
+  id     String @id @default(cuid())
+  needId String
+  need   Need   @relation(fields: [needId], references: [id])
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id])
+
+  boostedAt DateTime @default(now())
+}

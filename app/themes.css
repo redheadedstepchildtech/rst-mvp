@@ -1,0 +1,33 @@
+/* MICRO-SUMMARY BORDER — THEME AWARE */
+
+/* Warm */
+.theme-warm .micro-summary {
+  border-bottom: 3px solid #f2b8a0; /* soft warm red-beige */
+  padding-bottom: 4px;
+}
+
+/* Bold */
+.theme-bold .micro-summary {
+  border-bottom: 4px solid #000000; /* strong black */
+  padding-bottom: 6px;
+}
+
+/* Minimal */
+.theme-minimal .micro-summary {
+  border-bottom: 2px solid #d1d5db; /* neutral gray-300 */
+  padding-bottom: 4px;
+}
+
+/* MICRO-SUMMARY FONT SIZE PRESETS */
+
+.micro-summary-small {
+  font-size: 1rem;     /* ~16px */
+}
+
+.micro-summary-medium {
+  font-size: 1.5rem;   /* ~24px */
+}
+
+.micro-summary-large {
+  font-size: 2.25rem;  /* ~36px */
+}

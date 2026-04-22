@@ -1,0 +1,1 @@
+export function generateQR(text: string): Promise<string>;

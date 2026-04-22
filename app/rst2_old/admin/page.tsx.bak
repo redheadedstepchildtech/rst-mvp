@@ -1,0 +1,171 @@
+import fs from "fs";
+import path from "path";
+
+export default function AdminDashboard() {
+  // Load stories
+  const storiesDir = path.join(process.cwd(), "data", "stories");
+  let storyCount = 0;
+  let recentStories = [];
+  let storyActivity = {};
+
+  if (fs.existsSync(storiesDir)) {
+    const files = fs.readdirSync(storiesDir);
+    storyCount = files.length;
+
+    recentStories = files
+      .map((file) => {
+        const filePath = path.join(storiesDir, file);
+        const data = JSON.parse(fs.readFileSync(filePath, "utf8"));
+
+        const date = new Date(data.createdAt).toLocaleDateString();
+        storyActivity[date] = (storyActivity[date] || 0) + 1;
+
+        return data;
+      })
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      .slice(0, 5);
+  }
+
+  // FORM ANALYTICS (placeholder structure)
+  const formsDir = path.join(process.cwd(), "data", "forms");
+  let formCount = 0;
+  let formActivity = {};
+  let recentForms = [];
+
+  if (fs.existsSync(formsDir)) {
+    const files = fs.readdirSync(formsDir);
+    formCount = files.length;
+
+    recentForms = files
+      .map((file) => {
+        const filePath = path.join(formsDir, file);
+        const data = JSON.parse(fs.readFileSync(filePath, "utf8"));
+
+        const date = new Date(data.createdAt).toLocaleDateString();
+        formActivity[date] = (formActivity[date] || 0) + 1;
+
+        return data;
+      })
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      .slice(0, 5);
+  }
+
+  return (
+    <div className="max-w-3xl mx-auto p-6 space-y-10">
+
+      <h1 className="text-4xl font-bold text-center">Admin Dashboard</h1>
+
+      <p className="text-center text-gray-700">
+        Platform analytics and recent activity.
+      </p>
+
+      {/* Summary Cards */}
+      <div className="grid grid-cols-2 gap-4">
+
+        <div className="p-4 bg-blue-50 border rounded-lg text-center">
+          <p className="text-sm text-gray-600">Total Stories</p>
+          <p className="text-3xl font-bold">{storyCount}</p>
+        </div>
+
+        <div className="p-4 bg-green-50 border rounded-lg text-center">
+          <p className="text-sm text-gray-600">Forms Completed</p>
+          <p className="text-3xl font-bold">{formCount}</p>
+        </div>
+
+      </div>
+
+      {/* Story Activity */}
+      <div className="space-y-4">
+        <h2 className="text-2xl font-semibold">Story Activity</h2>
+
+        {Object.keys(storyActivity).length === 0 && (
+          <p className="text-gray-600">No story activity yet.</p>
+        )}
+
+        {Object.entries(storyActivity).map(([date, count]) => (
+          <div
+            key={date}
+            className="p-3 bg-white border rounded-lg flex justify-between"
+          >
+            <span>{date}</span>
+            <span className="font-semibold">{count} saved</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Form Activity */}
+      <div className="space-y-4">
+        <h2 className="text-2xl font-semibold">Form Activity</h2>
+
+        {Object.keys(formActivity).length === 0 && (
+          <p className="text-gray-600">No forms completed yet.</p>
+        )}
+
+        {Object.entries(formActivity).map(([date, count]) => (
+          <div
+            key={date}
+            className="p-3 bg-white border rounded-lg flex justify-between"
+          >
+            <span>{date}</span>
+            <span className="font-semibold">{count} completed</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Recent Forms */}
+      <div className="space-y-4">
+        <h2 className="text-2xl font-semibold">Recent Forms</h2>
+
+        {recentForms.length === 0 && (
+          <p className="text-gray-600">No forms completed yet.</p>
+        )}
+
+        {recentForms.map((form) => (
+          <div
+            key={form.id}
+            className="p-4 bg-white border rounded-lg"
+          >
+            <p className="text-lg font-semibold">{form.title}</p>
+            <p className="text-sm text-gray-500">
+              Completed on {new Date(form.createdAt).toLocaleDateString()}
+            </p>
+          </div>
+        ))}
+      </div>
+
+{/* Admin Tools */}
+<div className="space-y-4">
+  <h2 className="text-2xl font-semibold">Admin Tools</h2>
+
+  <a
+    href="/rst2/stories"
+    className="block p-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700"
+  >
+    View All Stories
+  </a>
+
+  <a
+    href="/rst2/forms/all"
+    className="block p-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700"
+  >
+    View All Forms
+  </a>
+
+  <a
+    href="/rst2/forms"
+    className="block p-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700"
+  >
+    Form Filler Outer
+  </a>
+</div>
+
+      <a
+        href="/rst2"
+        className="block text-center p-3 bg-gray-300 rounded-lg font-semibold hover:bg-gray-400"
+      >
+        Back to RST 2.0
+      </a>
+
+    </div>
+  );
+}
