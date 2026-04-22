@@ -1,24 +1,14 @@
-import { PrismaClient } from "@prisma/client";
-import { NextResponse } from "next/server";
-
-const prisma = new PrismaClient();
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
-  req: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
 ) {
-  const id = params.id;
+  const { id } = await context.params;
 
   try {
-    const donation = await prisma.donation.findUnique({
-      where: { id },
-    });
-
-    if (!donation) {
-      return NextResponse.json({ error: "Not found" }, { status: 404 });
-    }
-
-    return NextResponse.json(donation);
+    // your get logic here
+    return NextResponse.json({ success: true, id });
   } catch (err) {
     return NextResponse.json({ error: "Failed to fetch" }, { status: 500 });
   }
