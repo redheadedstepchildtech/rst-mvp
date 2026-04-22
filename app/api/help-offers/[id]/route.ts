@@ -1,33 +1,24 @@
-import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { NextRequest, NextResponse } from "next/server";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 export async function PATCH(
-  req: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
 ) {
-  try {
-    const id = params.id;
-    const body = await req.json();
+  const { id } = await context.params;
+  const body = await request.json();
 
-    const updated = await prisma.helpOffer.update({
+  try {
+    // your update logic here
+    await prisma.helpOffer.update({
       where: { id },
-      data: {
-        title: body.title,
-        type: body.type,
-        description: body.description,
-        availability: body.availability,
-        contactPreference: body.contactPreference,
-        // photos can be added later if needed
-      },
-      include: { photos: true },
+      data: body,
     });
 
-    return NextResponse.json(updated);
-  } catch (error) {
-    console.error("Help Offer PATCH error:", error);
-    return NextResponse.json(
-      { error: "Failed to update help offer" },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: true });
+  } catch (err) {
+    return NextResponse.json({ error: "Failed to update help offer" }, { status: 500 });
   }
 }
