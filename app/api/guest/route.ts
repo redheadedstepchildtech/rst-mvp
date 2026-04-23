@@ -1,8 +1,9 @@
-import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
+import { NextResponse, cookies } from "next/server";
 
 export async function POST() {
-  cookies().set("session", "guest", {
+  const cookieStore = await cookies();
+
+  cookieStore.set("session", "guest", {
     httpOnly: true,
     secure: true,
     path: "/",
