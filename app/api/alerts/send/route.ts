@@ -9,13 +9,12 @@ const client = twilio(
   process.env.TWILIO_AUTH_TOKEN!
 );
 
-export async function POST(req: Request) {
-  try {
-    const formData = await request.formData();
+export async function POST(request: Request) {
+  const formData = await request.formData();
 
-const urgent = formData.get("urgent")?.toString() || "";
-const message = formData.get("message")?.toString() || "";
-const phone = formData.get("phone")?.toString() || "";
+    const urgent = formData.get("urgent")?.toString() || "";
+    const message = formData.get("message")?.toString() || "";
+    const phone = formData.get("phone")?.toString() || "";
 
 
     // Fetch subscribers
