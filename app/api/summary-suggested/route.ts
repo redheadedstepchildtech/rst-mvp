@@ -1,27 +1,37 @@
+import OpenAI from "openai";
 import { NextResponse } from "next/server";
 
+const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
 export async function POST(req: Request) {
-  const { story } = await req.json();
+  try {
+    const { text } = await req.json();
 
-  const prompt = `
-Rewrite the story below as a second option for a one-sentence summary.
+    if (!text) {
+      return NextResponse.json({ error: "Missing text" }, { status: 400 });
+    }
 
-Rules:
-- First-person.
-- 12–20 words.
-- Warm and simple.
-- No added details.
-- No drama.
-- No pity language.
-- No corporate tone.
-- Keep it human and grounded.
-- Make it different from the first summary.
+    const prompt = `
+Provide a short, clear, human summary of the following text.
+Keep it simple, warm, and easy to understand.
+Do not add details or change meaning.
 
-Story:
-${story}
-`;
+Text:
+${text}
+    `;
 
-  const summary = await runAI(prompt); // replace with your model call
+    const response = await client.responses.create({
+      model: "gpt-4o-mini",
+      input: prompt,
+    });
 
-  return NextResponse.json({ summary });
+    const summary = response.output_text || text;
+
+    return NextResponse.json({ summary });
+  } catch (err) {
+    return NextResponse.json(
+      { error: "AI summary failed" },
+      { status: 500 }
+    );
+  }
 }
