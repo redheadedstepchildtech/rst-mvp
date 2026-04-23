@@ -1,30 +1,36 @@
+import OpenAI from "openai";
 import { NextResponse } from "next/server";
 
+const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
 export async function POST(req: Request) {
-  const { story } = await req.json();
+  try {
+    const { text } = await req.json();
 
-  const prompt = `
-Rewrite the story below in a simpler, shorter, clearer way.
+    if (!text) {
+      return NextResponse.json({ error: "Missing text" }, { status: 400 });
+    }
 
-Rules:
-- Keep it first-person.
-- Keep the meaning the same.
-- Do NOT add details.
-- Use short sentences.
-- Use simple words.
-- Keep it warm and human.
-- Keep it dignified.
-- No pity language.
-- No dramatic tone.
-- No corporate tone.
-- Aim for a 3rd–5th grade reading level.
+    const prompt = `
+Simplify the following text so it is clear, plain, and easy to understand.
+Do not change the meaning.
 
-Story:
-${story}
-`;
+Text:
+${text}
+    `;
 
-  // Call your AI model here
-  const simplified = await runAI(prompt); // replace with your model call
+    const response = await client.responses.create({
+      model: "gpt-4o-mini",
+      input: prompt,
+    });
 
-  return NextResponse.json({ simplified });
+    const simplified = response.output_text || text;
+
+    return NextResponse.json({ simplified });
+  } catch (err) {
+    return NextResponse.json(
+      { error: "AI simplify failed" },
+      { status: 500 }
+    );
+  }
 }
