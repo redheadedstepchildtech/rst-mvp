@@ -11,10 +11,12 @@ const client = twilio(
 
 export async function POST(req: Request) {
   try {
-    const form = await req.formData();
-    const message = form.get("message");
-    const category = form.get("category") || "ALL"; // fallback so Prisma never gets null
-    const urgent = form.get("urgent") === "on";
+    const formData = await request.formData();
+
+const urgent = formData.get("urgent")?.toString() || "";
+const message = formData.get("message")?.toString() || "";
+const phone = formData.get("phone")?.toString() || "";
+
 
     // Fetch subscribers
     const subscribers =
