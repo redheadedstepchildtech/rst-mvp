@@ -32,8 +32,7 @@ ${story}
       `,
     });
 
-    const cleaned =
-      response.output_text || response.output[0]?.content[0]?.text || story;
+    const cleaned = response.output_text || story;
 
     return NextResponse.json({ cleaned });
   } catch (err) {
