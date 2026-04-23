@@ -1,11 +1,10 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
-export async function POST(request: Request) {
-  // In the future, you’ll validate username/password here.
-  // For now, we just set the session cookie.
+export async function POST() {
+  const cookieStore = await cookies();
 
-  cookies().set("session", "active", {
+  cookieStore.set("session", "active", {
     httpOnly: true,
     secure: true,
     path: "/",
