@@ -5,20 +5,6 @@ import path from "path";
 import { sendEmail } from "@/lib/email";
 import { sendSMS } from "@/lib/sms";
 
-// EMAIL
-await sendEmail(
-  "admin@rst.local",
-  "New Need Created",
-  `<h1>${need.title}</h1><p>${need.description}</p>`
-);
-
-// OPTIONAL SMS
-await sendSMS(
-  "+1406YOURNUMBER",
-  `New Need Created: ${need.title}`
-);
-
-
 export async function POST(req: Request) {
   const formData = await req.formData();
 
@@ -82,6 +68,19 @@ export async function POST(req: Request) {
       userId,
     },
   });
+
+  // EMAIL (now inside POST)
+  await sendEmail(
+    "admin@rst.local",
+    "New Need Created",
+    `<h1>${need.title}</h1><p>${need.description}</p>`
+  );
+
+  // OPTIONAL SMS (also inside POST)
+  await sendSMS(
+    "+1406YOURNUMBER",
+    `New Need Created: ${need.title}`
+  );
 
   return NextResponse.json({ id: need.id });
 }
