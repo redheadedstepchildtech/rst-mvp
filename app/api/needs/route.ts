@@ -69,14 +69,14 @@ export async function POST(req: Request) {
     },
   });
 
-  // EMAIL (now inside POST)
+  // EMAIL
   await sendEmail(
     "admin@rst.local",
     "New Need Created",
     `<h1>${need.title}</h1><p>${need.description}</p>`
   );
 
-  // OPTIONAL SMS (also inside POST)
+  // OPTIONAL SMS
   await sendSMS(
     "+1406YOURNUMBER",
     `New Need Created: ${need.title}`
