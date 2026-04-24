@@ -17,27 +17,22 @@ export default function RecommendedStories({ id }) {
 
   if (!stories || stories.length === 0) return null;
 
-// Filter out any stories missing an ID
-const validStories = stories.filter((s) => s.id);
+  // Filter out any stories missing an ID
+  const validStories = stories.filter((s) => s.id);
 
-if (validStories.length === 0) return null;
+  if (validStories.length === 0) return null;
 
   return (
     <div className="mt-12">
       <h2 className="text-2xl font-semibold mb-4">Recommended Stories</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {stories
-          .filter((story) => story.id) // only keep stories with valid IDs
-          {validStories.map((story) => (
-  <Link
-    key={story.id}
-    href={`/story/${story.id}`}
-    className="block"
-  >
-    {story.title}
-  </Link>
-))}
+        {validStories.map((story) => (
+          <Link
+            key={story.id}
+            href={`/story/${story.id}`}
+            className="block border rounded-lg p-4 shadow hover:shadow-lg transition"
+          >
             <h3 className="text-lg font-semibold mb-1">{story.name}</h3>
 
             <p className="text-sm text-gray-600 mb-2">
