@@ -40,8 +40,8 @@ export default function EditPage({ params }: { params: { id: string } }) {
     const file = formData.get("photo") as File | null;
 
     if (file && file.size > 0) {
-  // Photo upload coming soon
-  photoUrl = "";
+      // Photo upload disabled for MVP
+      photoUrl = "";
 }
 
     const payload = {
