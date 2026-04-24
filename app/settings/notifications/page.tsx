@@ -3,8 +3,11 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export default async function NotificationSettings() {
-  const userId = cookies().get("rst_user")?.value;
+  const cookieStore = await cookies();
+  const userId = cookieStore.get("rst_user")?.value;
+
   if (!userId) redirect("/login");
+
 
   const prefs = await prisma.notificationPreferences.upsert({
     where: { userId },
