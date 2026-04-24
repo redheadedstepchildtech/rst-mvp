@@ -3,8 +3,12 @@
 import { useState, useEffect } from "react";
 import QRCode from "qrcode";
 
-const qrUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/qr/${need.id}`;
-const qrDataUrl = await QRCode.toDataURL(qrUrl);
+// ❌ REMOVE THIS — it does not belong on the create page
+// const qrUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/qr/${need.id}`;
+// const qrDataUrl = await QRCode.toDataURL(qrUrl);
+
+// Continue with your create form component...
+
 
 const TYPES = [
   { value: "story", label: "Story" },
