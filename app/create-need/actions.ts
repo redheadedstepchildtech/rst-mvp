@@ -11,56 +11,39 @@ export async function createNeed(formData: FormData) {
   const nonprofitName = formData.get('nonprofitName') as string | null;
   const ein = formData.get('ein') as string | null;
 
-}
-
-const uploadedUrls: string[] = [];
-
-for (const photo of photos) {
-  if (photo.size > 0) {
-    const uploadForm = new FormData();
-    uploadForm.append('file', photo);
-
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/upload`, {
-      method: 'POST',
-      body: uploadForm,
-    });
-
-    const data = await res.json();
-    uploadedUrls.push(data.url);
-  }
-}
-
-  if (!title || !needType) {
+  if (!title) {
     throw new Error("Missing required fields");
   }
 
-const photos = formData.getAll('photos') as File[];
+  // Upload photos
+  const uploadedUrls: string[] = [];
 
-const uploadedUrls: string[] = [];
+  for (const photo of photos) {
+    if (photo.size > 0) {
+      const uploadForm = new FormData();
+      uploadForm.append('file', photo);
 
-for (const photo of photos) {
-  if (photo.size > 0) {
-    const uploadForm = new FormData();
-    uploadForm.append('file', photo);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/upload`, {
+        method: 'POST',
+        body: uploadForm,
+      });
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/upload`, {
-      method: 'POST',
-      body: uploadForm,
-    });
-
-    const data = await res.json();
-    uploadedUrls.push(data.url);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.url) uploadedUrls.push(data.url);
+      }
+    }
   }
-}
 
+  // Create Need in DB
   await prisma.need.create({
     data: {
       title,
-      needType,
-      amount,
       category,
       story,
-      photos: uploadedUrls,
+      photoUrls: uploadedUrls,
+      nonprofitName,
+      ein,
       userId: 'dev-user',
     },
   });
