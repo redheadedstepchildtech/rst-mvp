@@ -40,11 +40,9 @@ export default function EditPage({ params }: { params: { id: string } }) {
     const file = formData.get("photo") as File | null;
 
     if (file && file.size > 0) {
-      const blob = await put(`donation-${Date.now()}.jpg`, file, {
-        access: "public",
-      });
-      photoUrl = blob.url;
-    }
+  // Photo upload coming soon
+  photoUrl = "";
+}
 
     const payload = {
       amount: Number(formData.get("amount")),
