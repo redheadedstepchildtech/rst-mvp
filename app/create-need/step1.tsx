@@ -1,5 +1,3 @@
-import { aiSuggestTitle } from "./actions";
-
 export default function Step1() {
   return (
     <div>
@@ -21,14 +19,8 @@ export default function Step1() {
         />
       </label>
 
-      <form
-        action={async (formData) => {
-          "use server";
-          const needType = formData.get("needType") as string;
-          const title = await aiSuggestTitle(needType);
-          return { title };
-        }}
-      >
+      {/* Placeholder form — AI will be added later */}
+      <form action={async () => { "use server"; }}>
         <button
           type="submit"
           className="text-sm text-purple-600 hover:underline"
