@@ -1,69 +1,66 @@
-// OfferHelpPhotosStep.tsx
 "use client";
 
 import { useState } from "react";
 
-export default function OfferHelpPhotosStep({ photos, setPhotos, onNext, onBack }) {
+export default function OfferHelpPhotosStep({ onNext }) {
+  const [photos, setPhotos] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
 
-  const handleUpload = async (e) => {
-    const files = Array.from(e.target.files);
-    if (!files.length) return;
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
 
     setUploading(true);
 
-    const uploadedUrls = [];
+    const uploaded: string[] = [];
+    const fileList = Array.from(files as FileList);
 
-    for (const file of files) {
+    for (const file of fileList) {
       const formData = new FormData();
-      formData.append("file", file);
+      formData.append("file", file as Blob);
 
       const res = await fetch("/api/upload", {
         method: "POST",
         body: formData,
       });
 
-      const data = await res.json();
-      uploadedUrls.push(data.url);
+      const json = await res.json();
+      uploaded.push(json.url);
     }
 
+    setPhotos((prev) => [...prev, ...uploaded]);
     setUploading(false);
-    setPhotos([...(photos || []), ...uploadedUrls]);
   };
 
   return (
-    <div className="space-y-4">
-      <h2 className="text-xl font-semibold">Add Photos</h2>
+    <div>
+      <h2 className="text-xl font-semibold mb-4">Upload Photos</h2>
 
       <input
         type="file"
+        accept="image/*"
         multiple
         onChange={handleUpload}
-        className="border p-2 rounded"
       />
 
       {uploading && <p>Uploading...</p>}
 
-      {photos?.length > 0 && (
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-          {photos.map((url) => (
-            <img
-              key={url}
-              src={url}
-              className="w-full h-32 object-cover rounded"
-            />
-          ))}
-        </div>
-      )}
-
-      <div className="flex justify-between pt-4">
-        <button onClick={onBack} className="bg-gray-200 px-4 py-2 rounded">
-          Back
-        </button>
-        <button onClick={onNext} className="bg-red-600 text-white px-4 py-2 rounded">
-          Next
-        </button>
+      <div className="grid grid-cols-3 gap-2 mt-4">
+        {photos.map((url) => (
+          <img
+            key={url}
+            src={url}
+            className="w-full h-24 object-cover rounded"
+          />
+        ))}
       </div>
+
+      <button
+        className="mt-4 bg-blue-600 text-white px-4 py-2 rounded"
+        onClick={() => onNext(photos)}
+      >
+        Continue
+      </button>
     </div>
   );
 }
