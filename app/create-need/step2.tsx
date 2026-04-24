@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { generateStory } from "@/app/actions/needActions";
 
 export default function Step2({ story, setStory, title, category, isNonprofit, orgName }) {
   const [loading, setLoading] = useState(false);
@@ -17,7 +16,6 @@ export default function Step2({ story, setStory, title, category, isNonprofit, o
     formData.append("orgName", orgName || "");
     formData.append("existing", story || "");
 
-    const res = await generateStory(formData);
     setAiStory(res.story);
     setLoading(false);
   }
