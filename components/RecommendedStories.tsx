@@ -30,13 +30,13 @@ if (validStories.length === 0) return null;
         {stories
           .filter((story) => story.id) // only keep stories with valid IDs
           {validStories.map((story) => (
-            <Link
-              key={story.id}
-              href={`/story/${story.id}`}
-              className="block border rounded-lg p-4 shadow hover:shadow-lg transition"
-    >
-      ...
-    </Link>
+  <Link
+    key={story.id}
+    href={`/story/${story.id}`}
+    className="block"
+  >
+    {story.title}
+  </Link>
 ))}
             <h3 className="text-lg font-semibold mb-1">{story.name}</h3>
 
