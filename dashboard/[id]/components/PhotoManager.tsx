@@ -7,15 +7,15 @@ export function PhotoManager({ itemId, isDonation }) {
   const router = useRouter();
   const [uploading, setUploading] = useState(false);
 
-  const handleUpload = async (e) => {
-    const files = Array.from(e.target.files);
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files as FileList);
     if (!files.length) return;
 
     setUploading(true);
 
     for (const file of files) {
       const formData = new FormData();
-      formData.append("file", file);
+      formData.append("file", file as Blob);
 
       const res = await fetch("/api/upload", {
         method: "POST",
@@ -24,7 +24,6 @@ export function PhotoManager({ itemId, isDonation }) {
 
       const data = await res.json();
 
-      // Save photo to DB
       await fetch("/api/photos", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
