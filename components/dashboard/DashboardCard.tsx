@@ -1,7 +1,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Donation, HelpOffer } from "@/types";
-import Link from "next/link";
 
 // inside the button area in DashboardCard, when not editing:
 {!editing && (
