@@ -61,8 +61,6 @@ export default function CreateNeedPage() {
     const json = await res.json();
     window.location.href = `/need/${json.id}`;
   }
-<img src={qrDataUrl} alt="QR Code" className="w-40 h-40" />
-
 
   return (
     <div className="max-w-2xl mx-auto py-10">
