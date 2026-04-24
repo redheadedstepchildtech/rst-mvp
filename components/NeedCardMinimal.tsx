@@ -1,6 +1,5 @@
 "use client";
 
-import type { Need } from "@prisma/client";
 import Link from "next/link";
 
 const CATEGORY_ICONS: Record<string, string> = {
@@ -36,11 +35,7 @@ function categoryClasses(category?: string) {
   };
 }
 
-type Props = {
-  need: Need;
-};
-
-export default function NeedCardMinimal({ need }: Props) {
+  export default function NeedCardMinimal({ need }: { need: any }) {
   const created = new Date(need.createdAt).toLocaleDateString();
 
   return (
