@@ -25,8 +25,6 @@ export default async function DashboardPage() {
       { urgencyBoost: "desc" },
       { visibilityBoost: "desc" },
       { dignityBoost: "desc" },
-      // If you add createdAt later:
-      // { createdAt: "desc" },
     ],
   });
 
@@ -52,7 +50,7 @@ export default async function DashboardPage() {
         {needs.map((need) => {
           const lastBoost = need.boosts?.[0] || null;
 
-          let nextBoostDate = null;
+          let nextBoostDate: string | null = null;
           if (lastBoost) {
             const last = new Date(lastBoost.createdAt);
             const next = new Date(last.getTime() + 1000 * 60 * 60 * 24 * 30);
