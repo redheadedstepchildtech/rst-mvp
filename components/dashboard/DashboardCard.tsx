@@ -1,32 +1,8 @@
+"use client";
+
 import { useState } from "react";
 import Link from "next/link";
 import { Donation, HelpOffer } from "@/types";
-
-// inside the button area in DashboardCard, when not editing:
-{!editing && (
-  <>
-    <Link
-      href={`/rst/dashboard/${item.id}`}
-      className="bg-gray-200 px-4 py-2 rounded inline-flex items-center justify-center"
-    >
-      View
-    </Link>
-
-    <button
-      onClick={() => setEditing(true)}
-      className="bg-gray-200 px-4 py-2 rounded"
-    >
-      Edit
-    </button>
-
-    <button
-      onClick={handleDelete}
-      className="bg-gray-200 px-4 py-2 rounded"
-    >
-      Delete
-    </button>
-  </>
-)}
 
 interface Props {
   item: Donation | HelpOffer;
@@ -177,15 +153,17 @@ export default function DashboardCard({ item, type, onDelete, onUpdate }: Props)
         </>
       )}
 
+      {/* ACTION BUTTONS */}
       <div className="flex gap-3 mt-3">
-  <Link
-    href={`/rst/dashboard/${item.id}`}
-    className="bg-gray-200 px-4 py-2 rounded inline-flex items-center justify-center"
-  >
-    View
-  </Link>
-</div>
+        {!editing && (
           <>
+            <Link
+              href={`/rst/dashboard/${item.id}`}
+              className="bg-gray-200 px-4 py-2 rounded inline-flex items-center justify-center"
+            >
+              View
+            </Link>
+
             <button
               onClick={() => setEditing(true)}
               className="bg-gray-200 px-4 py-2 rounded"
