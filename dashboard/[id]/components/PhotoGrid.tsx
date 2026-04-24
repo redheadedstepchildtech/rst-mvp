@@ -1,7 +1,15 @@
-export function PhotoGrid({ photos }) {
+"use client";
+
+import { useRouter } from "next/navigation";
+
+interface PhotoGridProps {
+  photos: { id: string; url: string }[];
+}
+
+export function PhotoGrid({ photos }: PhotoGridProps) {
   const router = useRouter();
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id: string) => {
     if (!confirm("Delete this photo?")) return;
 
     await fetch(`/api/photos/${id}`, {
@@ -12,19 +20,21 @@ export function PhotoGrid({ photos }) {
   };
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-3">
+    <div className="grid grid-cols-3 gap-3 mt-4">
       {photos.map((photo) => (
-        <div key={photo.id} className="relative group">
+        <div key={photo.id} className="relative">
           <img
             src={photo.url}
-            className="w-full h-32 object-cover rounded"
+            alt="Photo"
+            className="w-full h-24 object-cover rounded"
           />
 
           <button
+            type="button"
             onClick={() => handleDelete(photo.id)}
-            className="absolute top-1 right-1 bg-white/80 text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition"
+            className="absolute top-1 right-1 bg-black bg-opacity-60 text-white text-xs px-2 py-1 rounded"
           >
-            Delete
+            X
           </button>
         </div>
       ))}
