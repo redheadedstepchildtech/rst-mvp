@@ -1,3 +1,5 @@
+"use client";
+
 import { useRef } from "react";
 
 interface PhotoUploadProps {
@@ -47,18 +49,6 @@ export default function PhotoUpload({
         <p>Drag & drop or click to upload</p>
         <p className="text-sm text-gray-500">Max {max} photos</p>
       </div>
-const uploadFile = async (file: File) => {
-  const formData = new FormData();
-  formData.append("file", file);
-
-  const res = await fetch("/api/upload", {
-    method: "POST",
-    body: formData,
-  });
-
-  const data = await res.json();
-  return data.url;
-};
 
       {/* Hidden File Input */}
       <input
@@ -82,24 +72,6 @@ const uploadFile = async (file: File) => {
                 alt="Preview"
                 className="w-full h-24 object-cover rounded"
               />
-
-const handleFiles = async (files: FileList | null) => {
-  if (!files) return;
-
-  const newFiles = Array.from(files);
-
-  const allowed = max - photos.length;
-  const selected = newFiles.slice(0, allowed);
-
-  const uploadedUrls: string[] = [];
-
-  for (const file of selected) {
-    const url = await uploadFile(file);
-    uploadedUrls.push(url);
-  }
-
-  setPhotos([...photos, ...uploadedUrls]);
-};
 
               <button
                 type="button"
