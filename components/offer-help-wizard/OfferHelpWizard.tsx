@@ -1,127 +1,87 @@
+"use client";
+
 import { useState } from "react";
-import WelcomeStep from "./WelcomeStep";
-import HelpTypeStep from "./HelpTypeStep";
-import HelpDetailsStep from "./HelpDetailsStep";
-import HelpPhotosStep from "./HelpPhotosStep";
-import HelpReviewStep from "./HelpReviewStep";
-import HelpFinalStep from "./HelpFinalStep";
+import OfferHelpDetailsStep from "./OfferHelpDetailsStep";
+import OfferHelpPhotosStep from "./OfferHelpPhotosStep";
+import OfferHelpReviewStep from "./OfferHelpReviewStep";
 
 export default function OfferHelpWizard() {
   const [currentStep, setCurrentStep] = useState(1);
+  const [submitting, setSubmitting] = useState(false);
 
-const handleSubmit = async () => {
-  setSubmitting(true);
-
-  const res = await fetch("/api/help-offers", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(helpData),
-  });
-
-  const created = await res.json();
-
-  setSubmitting(false);
-  setCurrentStep("final");
-};
-
-  const [helpData, setHelpData] = useState({
-    type: "",
+  // Wizard data
+  const [details, setDetails] = useState({
     title: "",
     description: "",
+    type: "",
     availability: "",
     contactPreference: "",
-    photos: [] as File[],
   });
 
-  const nextStep = () => setCurrentStep((prev) => prev + 1);
-  const prevStep = () => setCurrentStep((prev) => prev - 1);
+  const [photos, setPhotos] = useState<string[]>([]);
 
-  const updateHelpData = (updates: Partial<typeof helpData>) => {
-    setHelpData((prev) => ({ ...prev, ...updates }));
-  };
+  const handleSubmit = async () => {
+    setSubmitting(true);
 
-const handleSubmit = async () => {
-  const payload = {
-    type: formData.type,
-    title: formData.title,
-    description: formData.description,
-    availability: formData.availability,
-    contactPreference: formData.contactPreference,
-    photos: formData.photos.map((url) => ({
-      id: crypto.randomUUID(),
-      url,
-    })),
-    userId: "temp-user",
-  };
+    const payload = {
+      ...details,
+      photos,
+    };
 
-  const res = await fetch("/api/help-offers", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
+    const res = await fetch("/api/help-offers", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
 
-  const data = await res.json();
-  console.log("Created help offer:", data);
-};
+    setSubmitting(false);
 
-  const renderStep = () => {
-    switch (currentStep) {
-      case 1:
-        return <WelcomeStep nextStep={nextStep} />;
-      case 2:
-        return (
-          <HelpTypeStep
-            nextStep={nextStep}
-            updateHelpData={updateHelpData}
-            helpData={helpData}
-          />
-        );
-      case 3:
-        return (
-          <HelpDetailsStep
-            nextStep={nextStep}
-            prevStep={prevStep}
-            updateHelpData={updateHelpData}
-            helpData={helpData}
-          />
-        );
-      case 4:
-        return (
-          <HelpPhotosStep
-            nextStep={nextStep}
-            prevStep={prevStep}
-            updateHelpData={updateHelpData}
-            helpData={helpData}
-          />
-        );
-      case 5:
-        return (
-          <HelpReviewStep
-            nextStep={nextStep}
-            prevStep={prevStep}
-            helpData={helpData}
-          />
-        );
-      case 6:
-        return <HelpFinalStep />;
-      default:
-        return null;
+    if (res.ok) {
+      alert("Help offer submitted!");
+      setCurrentStep(1);
+      setDetails({
+        title: "",
+        description: "",
+        type: "",
+        availability: "",
+        contactPreference: "",
+      });
+      setPhotos([]);
+    } else {
+      alert("Error submitting help offer.");
     }
   };
 
-// OfferHelpWizard.tsx
-{
-  currentStep === "photos" && (
-    <OfferHelpPhotosStep
-      photos={helpData.photos}
-      setPhotos={(urls) =>
-        setHelpData((prev) => ({ ...prev, photos: urls }))
-      }
-      onNext={() => setCurrentStep("review")}
-      onBack={() => setCurrentStep("contact")}
-    />
-  );
-}
+  return (
+    <div className="max-w-xl mx-auto p-6 bg-white rounded shadow">
+      {currentStep === 1 && (
+        <OfferHelpDetailsStep
+          data={details}
+          onNext={(d) => {
+            setDetails(d);
+            setCurrentStep(2);
+          }}
+        />
+      )}
 
-  return <div className="wizard-container">{renderStep()}</div>;
+      {currentStep === 2 && (
+        <OfferHelpPhotosStep
+          onNext={(uploaded) => {
+            setPhotos(uploaded);
+            setCurrentStep(3);
+          }}
+        />
+      )}
+
+      {currentStep === 3 && (
+        <OfferHelpReviewStep
+          details={details}
+          photos={photos}
+          submitting={submitting}
+          onBack={() => setCurrentStep(2)}
+          onSubmit={handleSubmit}
+        />
+      )}
+    </div>
+  );
 }
