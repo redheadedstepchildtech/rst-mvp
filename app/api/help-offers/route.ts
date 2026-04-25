@@ -6,20 +6,21 @@ export async function POST(req: Request) {
     const body = await req.json();
 
     const helpOffer = await prisma.helpOffer.create({
-      data: {
-        title: body.title,
-        type: body.type,
-        description: body.description,
-        availability: body.availability,
-        contactPreference: body.contactPreference,
-        photos: {
-          create: body.photos?.map((url: string) => ({
-            url,
-          })) || [],
-        },
-      },
-      include: { photos: true },
-    });
+  data: {
+    needId: body.needId,   // ⭐ REQUIRED
+    title: body.title,
+    type: body.type,
+    description: body.description,
+    availability: body.availability,
+    contactPreference: body.contactPreference,
+    photos: {
+      create: body.photos?.map((url: string) => ({
+        url,
+      })) || [],
+    },
+  },
+  include: { photos: true },
+});
 
     return NextResponse.json(helpOffer);
   } catch (error) {
