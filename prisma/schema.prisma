@@ -187,6 +187,10 @@ model Donation {
   message    String?
   story      String?
 
+  template   String?
+  photoUrl   String?
+  slug       String?
+
   createdAt  DateTime @default(now())
 }
 
