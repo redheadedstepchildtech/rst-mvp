@@ -195,16 +195,19 @@ model Donation {
 }
 
 model HelpOffer {
-  id        String   @id @default(cuid())
-  needId    String
-  need      Need     @relation(fields: [needId], references: [id])
+  id           String   @id @default(cuid())
+  needId       String
+  need         Need     @relation(fields: [needId], references: [id])
 
-  userId    String?
-  user      User?    @relation(fields: [userId], references: [id])
+  userId       String?
+  user         User?    @relation(fields: [userId], references: [id])
 
-  message   String?
-  status    String?   // pending, accepted, declined
+  title        String?
+  type         String?
+  description  String?
+  availability String?
+  message      String?
+  status       String?   // pending, accepted, declined
 
-  createdAt DateTime @default(now())
+  createdAt    DateTime @default(now())
 }
-
