@@ -1,12 +1,19 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 
-const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
 export async function POST(req: Request) {
   try {
+    const apiKey = process.env.OPENAI_API_KEY;
+
+    if (!apiKey) {
+      return NextResponse.json(
+        { error: "Missing OpenAI API key" },
+        { status: 500 }
+      );
+    }
+
+    const client = new OpenAI({ apiKey });
+
     const body = await req.json();
 
     const prompt = `
@@ -47,12 +54,10 @@ Return your answer in this JSON format:
 
     const raw = completion.choices[0].message.content || "";
 
-    // Try to parse JSON from the model output
     let parsed;
     try {
       parsed = JSON.parse(raw);
     } catch {
-      // fallback if the model didn't return perfect JSON
       parsed = {
         listing: raw,
         appraisal: {
