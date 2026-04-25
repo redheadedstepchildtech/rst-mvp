@@ -7,8 +7,8 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    // FIX: Destructure ALL fields coming from the form
     const {
+      needId,      // ⭐ MUST be included
       amount,
       donorName,
       donorEmail,
@@ -19,6 +19,13 @@ export async function POST(req: Request) {
       slug,
     } = body;
 
+    if (!needId) {
+      return NextResponse.json(
+        { error: "needId is required." },
+        { status: 400 }
+      );
+    }
+
     if (!amount || typeof amount !== "number") {
       return NextResponse.json(
         { error: "Amount is required and must be a number." },
@@ -26,9 +33,9 @@ export async function POST(req: Request) {
       );
     }
 
-    // FIX: Save all fields to Prisma
     const donation = await prisma.donation.create({
       data: {
+        needId,      // ⭐ REQUIRED
         amount,
         donorName,
         donorEmail,
