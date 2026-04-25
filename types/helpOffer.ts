@@ -1,6 +1,6 @@
 import { Photo } from "./photo";
 
-export interface Donation {
+export interface HelpOffer {
   id: string;
   title: string;
   category: "item" | "service" | "support" | "other";
