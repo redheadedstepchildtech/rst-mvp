@@ -195,19 +195,31 @@ model Donation {
 }
 
 model HelpOffer {
+  id                String   @id @default(cuid())
+  needId            String
+  need              Need     @relation(fields: [needId], references: [id])
+
+  userId            String?
+  user              User?    @relation(fields: [userId], references: [id])
+
+  title             String?
+  type              String?
+  description       String?
+  availability      String?
+  contactPreference String?
+
+  photos            Photo[]  // ⭐ REQUIRED for your route
+
+  createdAt         DateTime @default(now())
+}
+
+model Photo {
   id           String   @id @default(cuid())
-  needId       String
-  need         Need     @relation(fields: [needId], references: [id])
+  url          String
 
-  userId       String?
-  user         User?    @relation(fields: [userId], references: [id])
+  helpOfferId  String?
+  helpOffer    HelpOffer? @relation(fields: [helpOfferId], references: [id])
 
-  title        String?
-  type         String?
-  description  String?
-  availability String?
-  message      String?
-  status       String?   // pending, accepted, declined
-
-  createdAt    DateTime @default(now())
+  donationId   String?
+  donation     Donation?  @relation(fields: [donationId], references: [id])
 }
