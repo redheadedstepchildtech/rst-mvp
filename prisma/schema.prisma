@@ -24,11 +24,12 @@ model User {
   orgName   String?
   name      String?
   avatarUrl String?
+  phone     String?     // ⭐ ADD THIS
 
   partnerNotes   PartnerNote[]
   partnerUploads PartnerUpload[]
   boostHistory   BoostHistory[]
-  reportedPhotos ReportedPhoto[]   // ⭐ ADD THIS
+  reportedPhotos ReportedPhoto[]
   donations      Donation[]
   helpOffers     HelpOffer[]
 
