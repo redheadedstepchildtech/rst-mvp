@@ -191,6 +191,8 @@ model Donation {
   photoUrl   String?
   slug       String?
 
+  photos     Photo[]     // ⭐ REQUIRED
+
   createdAt  DateTime @default(now())
 }
 
