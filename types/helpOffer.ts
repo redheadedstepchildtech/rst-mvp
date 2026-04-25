@@ -4,6 +4,9 @@ export interface HelpOffer {
   id: string;
   title: string;
   category: "item" | "service" | "support" | "other";
+  type: string;               // ← REQUIRED
+  availability: string;       // ← REQUIRED
+  contactPreference: string;  // ← REQUIRED
   description: string;
   photos: Photo[];
   createdAt: string;
