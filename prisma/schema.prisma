@@ -191,7 +191,7 @@ model Donation {
   photoUrl   String?
   slug       String?
 
-  photos     Photo[]     // ⭐ REQUIRED
+  photos     Photo[]   // ⭐ Opposite side of Photo.donation
 
   createdAt  DateTime @default(now())
 }
