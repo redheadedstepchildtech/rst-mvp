@@ -1,5 +1,8 @@
 export interface Photo {
   id: string;
   url: string;
-  alt?: string;
+  createdAt: string;
+  updatedAt: string;
+  donationId?: string;
+  helpOfferId?: string;
 }

@@ -1,10 +1,17 @@
-export interface Photo {
+import { Photo } from "./photo";
+
+export interface HelpOffer {
   id: string;
-  url: string;
+  title: string;
+  category: string;
+  type: string;
+  availability: string;
+  contactPreference: string;
+  description: string;
+  photos: Photo[];
   createdAt: string;
   updatedAt: string;
-  donationId?: string;
-  helpOfferId?: string;
+  userId: string;
 }
 
 export interface HelpOffer {
