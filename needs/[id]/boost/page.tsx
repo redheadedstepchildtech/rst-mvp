@@ -6,6 +6,9 @@ import { redirect } from "next/navigation";
 export default async function BoostPage({ params }) {
   const { id } = params;
 
+  // Temporary until auth is added
+  const currentUserId = "demo-user";
+
   const need = await prisma.need.findUnique({
     where: { id },
     include: {
@@ -13,12 +16,13 @@ export default async function BoostPage({ params }) {
     },
   });
 
-await prisma.boostHistory.create({
-  data: {
-    needId,
-    userId: currentUserId || null,
-  },
-});
+  // Log boost history entry
+  await prisma.boostHistory.create({
+    data: {
+      needId: id,
+      userId: currentUserId,
+    },
+  });
 
   if (!need) {
     return (
@@ -33,13 +37,12 @@ await prisma.boostHistory.create({
 
   async function handleBoost() {
     "use server";
-    await addBoost(id);
+    await addBoost(id, "visibility"); // or whichever type you want
     redirect(`/rst/needs/${id}`);
   }
 
   return (
     <main className="p-6 max-w-3xl mx-auto">
-
       {/* Back */}
       <Link
         href={`/rst/needs/${id}`}
