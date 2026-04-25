@@ -181,6 +181,8 @@ model Donation {
   userId     String?
   user       User?    @relation(fields: [userId], references: [id])
 
+  photos     Photo[]   // ⭐ MUST be here, grouped with relations
+
   amount     Float?
   donorName  String?
   donorEmail String?
@@ -190,8 +192,6 @@ model Donation {
   template   String?
   photoUrl   String?
   slug       String?
-
-  photos     Photo[]   // ⭐ Opposite side of Photo.donation
 
   createdAt  DateTime @default(now())
 }
