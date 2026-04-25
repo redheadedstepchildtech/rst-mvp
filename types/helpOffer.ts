@@ -11,8 +11,10 @@ export interface HelpOffer {
   id: string;
   title: string;
   category: string;
+  type: string;
   availability: string;
   contactPreference: string;
+  description: string;   // ⭐ REQUIRED
   photos: Photo[];
   createdAt: string;
   updatedAt: string;
