@@ -11,14 +11,6 @@ datasource db {
 generator client {
   provider = "prisma-client-js"
 }
-await prisma.partnerUpload.create({
-  data: {
-    needId,
-    partnerId,
-    fileUrl,
-    fileName,
-  }
-})
 
 //
 // ------------------------------------------------------
