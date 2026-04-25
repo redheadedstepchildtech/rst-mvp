@@ -1,13 +1,23 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 
-const client = new OpenAI({
-  apiKey: process.env.AZURE_OPENAI_KEY,
-  baseURL: process.env.AZURE_OPENAI_ENDPOINT,
-});
-
 export async function POST(req: Request) {
   try {
+    const apiKey = process.env.AZURE_OPENAI_KEY;
+    const endpoint = process.env.AZURE_OPENAI_ENDPOINT;
+
+    if (!apiKey || !endpoint) {
+      return NextResponse.json(
+        { error: "Missing Azure OpenAI credentials" },
+        { status: 500 }
+      );
+    }
+
+    const client = new OpenAI({
+      apiKey,
+      baseURL: endpoint,
+    });
+
     const body = await req.json();
 
     const prompt = `
@@ -36,6 +46,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ ai: text });
   } catch (err) {
     console.error(err);
-    return NextResponse.json({ error: "AI generation failed" }, { status: 500 });
+    return NextResponse.json(
+      { error: "AI generation failed" },
+      { status: 500 }
+    );
   }
 }
