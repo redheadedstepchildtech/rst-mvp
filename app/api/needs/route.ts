@@ -50,7 +50,6 @@ export async function POST(req: Request) {
   const need = await prisma.need.create({
     data: {
       id: idForQR,
-      type,
       title,
       category,
       description,
