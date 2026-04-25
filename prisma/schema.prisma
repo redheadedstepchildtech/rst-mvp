@@ -173,17 +173,21 @@ model AlertSubscriber {
 }
 
 model Donation {
-  id        String   @id @default(cuid())
-  needId    String
-  need      Need     @relation(fields: [needId], references: [id])
+  id         String   @id @default(cuid())
 
-  userId    String?
-  user      User?    @relation(fields: [userId], references: [id])
+  needId     String
+  need       Need     @relation(fields: [needId], references: [id])
 
-  amount    Float?
-  notes     String?
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id])
 
-  createdAt DateTime @default(now())
+  amount     Float?
+  donorName  String?
+  donorEmail String?
+  message    String?
+  story      String?
+
+  createdAt  DateTime @default(now())
 }
 
 model HelpOffer {
