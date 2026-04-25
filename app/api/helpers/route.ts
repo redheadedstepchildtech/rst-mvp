@@ -14,12 +14,14 @@ export async function POST(req: Request) {
       );
     }
 
-    const helper = await prisma.helper.create({
+    const helper = await prisma.user.create({
       data: {
         phone,
-        // name is optional — add it if you want later
-      },
-    });
+        name,
+        role: "helper",
+     },
+   });
+
 
     return NextResponse.json(helper, { status: 201 });
   } catch (error) {
