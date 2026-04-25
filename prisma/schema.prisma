@@ -20,7 +20,7 @@ model User {
   id        String  @id @default(cuid())
   email     String  @unique
   password  String
-  role      String  @default("helper") // admin, moderator, partner, helper
+  role      String  @default("helper")
   orgName   String?
   name      String?
   avatarUrl String?
@@ -28,11 +28,11 @@ model User {
   partnerNotes   PartnerNote[]
   partnerUploads PartnerUpload[]
   boostHistory   BoostHistory[]
+  reportedPhotos ReportedPhoto[]   // ⭐ ADD THIS
 
-  // Relations
   needs        Need[]
   partnerNeeds Need[]         @relation("PartnerNeeds")
-  partnerRules PartnerRules[] // ⭐ ADD THIS LINE
+  partnerRules PartnerRules[]
 
   createdAt               DateTime                 @default(now())
   notificationPreferences NotificationPreferences?
@@ -97,7 +97,8 @@ model Need {
   partnerUploads PartnerUpload[]
   qrScans        QRScan[]
   boostHistory   BoostHistory[]
-  user           User?           @relation(fields: [userId], references: [id])
+  reportedPhotos ReportedPhoto[]   // ⭐ ADD THIS
+  user           User?             @relation(fields: [userId], references: [id])
   userId         String?
 }
 
