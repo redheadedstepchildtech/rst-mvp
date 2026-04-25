@@ -141,3 +141,18 @@ model BoostHistory {
   type      String?   // ⭐ added field
   boostedAt DateTime @default(now())
 }
+
+model ReportedPhoto {
+  id        String   @id @default(cuid())
+
+  needId    String
+  need      Need     @relation(fields: [needId], references: [id])
+
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+
+  reason    String?
+  notes     String?
+
+  createdAt DateTime @default(now())
+}
