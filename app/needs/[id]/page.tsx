@@ -49,11 +49,6 @@ export default async function NeedPage({ params }) {
         {need.state && (
           <span className="px-2 py-1 bg-gray-100 rounded">{need.state}</span>
         )}
-        {need.boostCount > 0 && (
-          <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded">
-            {need.boostCount} boosts
-          </span>
-        )}
       </div>
 
       <p className="text-gray-800 leading-relaxed whitespace-pre-line">
