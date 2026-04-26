@@ -1,18 +1,10 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
 
 export async function POST(req: Request) {
-  const { userId } = await req.json();
-
-  const existing = await prisma.user.findUnique({
-    where: { id: userId },
+  // RST 1.0 does not use this route.
+  // User initialization will be implemented in RST 2.0.
+  return NextResponse.json({
+    ok: true,
+    message: "User init disabled until RST 2.0",
   });
-
-  if (!existing) {
-    await prisma.user.create({
-      data: { id: userId },
-    });
-  }
-
-  return NextResponse.json({ ok: true });
 }
