@@ -88,7 +88,7 @@ model Need {
   city           String?
   state          String?
   zip            String?
-  photoUrl       String?
+  photoUrl       String?   // ⭐ Keep as the “main” photo
   qrUrl          String?
   theme          String?
   microSummary   String?
@@ -100,7 +100,8 @@ model Need {
   userId         String
   user           User      @relation(fields: [userId], references: [id])
 
-  // ⭐ REQUIRED reverse relations
+  photos         Photo[]   // ⭐ MULTIPLE PHOTOS FOR NEED
+
   partnerNotes     PartnerNote[]
   partnerUploads   PartnerUpload[]
   qrScans          QRScan[]
@@ -229,4 +230,7 @@ model Photo {
 
   donationId   String?
   donation     Donation?  @relation(fields: [donationId], references: [id])
+
+  needId       String?        // ⭐ ADD THIS
+  need         Need? @relation(fields: [needId], references: [id])  // ⭐ ADD THIS
 }

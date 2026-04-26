@@ -8,14 +8,13 @@ export async function createNeed(formData: FormData) {
   const category = formData.get('category') as string | null;
   const story = formData.get('story') as string | null;
   const photos = formData.getAll('photos') as File[];
-  const nonprofitName = formData.get('nonprofitName') as string | null;
-  const ein = formData.get('ein') as string | null;
 
-  if (!title) {
-    throw new Error("Missing required fields");
+  // ✅ required fields
+  if (!title || !category) {
+    throw new Error("Missing required fields: title and category are required.");
   }
 
-  // Upload photos
+  // ✅ upload photos
   const uploadedUrls: string[] = [];
 
   for (const photo of photos) {
@@ -35,18 +34,26 @@ export async function createNeed(formData: FormData) {
     }
   }
 
-  // Create Need in DB
-  await prisma.need.create({
+  // ✅ create Need
+  const need = await prisma.need.create({
     data: {
       title,
       category,
-      story,
-      photoUrls: uploadedUrls,
-      nonprofitName,
-      ein,
-      userId: 'dev-user',
+      description: story || null,
+      photoUrl: uploadedUrls[0] || null, // main photo
+      userId: 'dev-user', // placeholder for now
     },
   });
+
+  // ✅ create Photo records
+  if (uploadedUrls.length > 0) {
+    await prisma.photo.createMany({
+      data: uploadedUrls.map((url) => ({
+        url,
+        needId: need.id,
+      })),
+    });
+  }
 
   redirect('/dashboard?created=1');
 }
