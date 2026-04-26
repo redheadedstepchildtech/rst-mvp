@@ -87,6 +87,7 @@ model Need {
   category      String?
   city          String?
   state         String?
+  zip           String?
   tags          String?
   boostCount    Int       @default(0)
   lastBoostedAt DateTime?
