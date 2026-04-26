@@ -54,7 +54,6 @@ export async function POST(req: Request) {
       category,
       description,
       tags,
-      needs,
       city,
       state,
       zip,
