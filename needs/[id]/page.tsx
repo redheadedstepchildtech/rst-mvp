@@ -51,13 +51,14 @@ export default async function NeedPage({ params }) {
 
       {/* Last Updated */}
       <p className="text-gray-500 text-sm mb-4">
-        Last updated on{" "}
-        {new Date(need.updatedAt).toLocaleDateString("en-US", {
+        Posted on{" "}
+        {new Date(need.createdAt).toLocaleDateString("en-US", {
           year: "numeric",
           month: "long",
           day: "numeric",
         })}
       </p>
+
 
       {/* Category */}
       {need.category && (
