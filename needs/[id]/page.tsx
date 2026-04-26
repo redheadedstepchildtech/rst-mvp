@@ -108,9 +108,9 @@ export default async function NeedPage({ params }) {
                 <h3 className="font-semibold text-lg mb-1">{other.title}</h3>
 
                 <p className="text-gray-600 text-sm mb-2 line-clamp-2">
-                  {other.story || "No story provided."}
+                  {other.description || "No story provided."}
                 </p>
-
+>
                 <Link
                   href={`/rst/needs/${other.id}`}
                   className="text-blue-600 text-sm underline"
