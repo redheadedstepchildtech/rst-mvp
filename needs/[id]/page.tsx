@@ -68,11 +68,7 @@ export default async function NeedPage({ params }) {
       )}
 
       {/* Verified Nonprofit */}
-      {need.verified && (
-        <span className="inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-medium mb-4 ml-2">
-          Verified Nonprofit
-        </span>
-      )}
+      {/* Nonprofit verification removed for RST 1.0 */}
 
       {/* Photo Gallery */}
       {need.photos?.length > 0 ? (
