@@ -56,7 +56,6 @@ export async function POST(req: Request) {
       tags,
       city,
       state,
-      zip,
       photoUrl,
       qrUrl,
       theme,
