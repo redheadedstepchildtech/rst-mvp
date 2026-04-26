@@ -81,32 +81,25 @@ model PartnerRules {
 //  NEED MODEL (clean + fixed)
 // ------------------------------------------------------
 model Need {
-  id            String    @id @default(cuid())
-  title         String
-  description   String?
-  category      String?
-  city          String?
-  state         String?
-  zip           String?
-  tags          String?
-  boostCount    Int       @default(0)
-  lastBoostedAt DateTime?
-  partnerId     String?
-  partner       User?     @relation("PartnerNeeds", fields: [partnerId], references: [id])
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id             String   @id @default(cuid())
+  title          String
+  category       String
+  description    String?
+  tags           String?
+  city           String?
+  state          String?
+  zip            String?        // required for browse-by-zip
+  photoUrl       String?        // required for uploaded images
+  qrUrl          String?        // required for QR posters
+  theme          String?
+  microSummary   String?
+  microPlacement String?
+  microSize      String?
+  status         String?   @default("open")
+  createdAt      DateTime  @default(now())
 
-  // NEW RELATIONS
-  partnerNotes   PartnerNote[]
-  partnerUploads PartnerUpload[]
-  qrScans        QRScan[]
-  boostHistory   BoostHistory[]
-  reportedPhotos ReportedPhoto[]   // ⭐ ADD THIS
-  donations      Donation[]
-  helpOffers     HelpOffer[]
-
-  user           User?             @relation(fields: [userId], references: [id])
-  userId         String?
+  userId         String
+  user           User      @relation(fields: [userId], references: [id])
 }
 
 model NotificationPreferences {
