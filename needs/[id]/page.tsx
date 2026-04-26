@@ -109,14 +109,14 @@ export default async function NeedPage({ params }) {
 
                 <p className="text-gray-600 text-sm mb-2 line-clamp-2">
                   {other.description || "No story provided."}
-                </p>
->
-                <Link
-                  href={`/rst/needs/${other.id}`}
-                  className="text-blue-600 text-sm underline"
-                >
-                  View →
-                </Link>
+                 </p>
+
+                 <Link
+                   href={`/rst/needs/${other.id}`}
+                   className="text-blue-600 text-sm underline"
+                  >
+                   View →
+                 </Link>
               </div>
             ))}
           </div>
