@@ -1,7 +1,4 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
 
 export async function POST(req: Request) {
   try {
@@ -16,6 +13,7 @@ export async function POST(req: Request) {
       location: String(form.get("location") || ""),
     };
 
+    // Basic validation stays
     if (!data.name || !data.details || !data.location) {
       return NextResponse.json(
         { error: "Missing required fields." },
@@ -23,27 +21,20 @@ export async function POST(req: Request) {
       );
     }
 
-    if (data.email) {
-      const recent = await prisma.publicRequest.findFirst({
-        where: {
-          email: data.email,
-          createdAt: {
-            gte: new Date(Date.now() - 1000 * 60 * 5),
-          },
-        },
-      });
+    // ⭐ RST 1.0: PublicRequest is disabled
+    return NextResponse.json({
+      ok: true,
+      message: "PublicRequest disabled until RST 2.0",
+      received: data,
+    });
 
-      if (recent) {
-        return NextResponse.json(
-          { error: "Please wait before submitting another request." },
-          { status: 429 }
-        );
-      }
-    }
-
-    await prisma.publicRequest.create({ data });
-
-    return NextResponse.json({ success: true });
+    // ------------------------------------------------------
+    // RST 2.0 IMPLEMENTATION WILL GO HERE
+    // ------------------------------------------------------
+    // const recent = await prisma.publicRequest.findFirst({...});
+    // if (recent) { ... }
+    // await prisma.publicRequest.create({ data });
+    // return NextResponse.json({ success: true });
   } catch (err) {
     return NextResponse.json(
       { error: "Failed to submit request" },
