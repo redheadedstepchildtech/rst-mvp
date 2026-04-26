@@ -1,12 +1,6 @@
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+// RST 1.0 — Request logging disabled.
+// This will be re-enabled in a future release if needed.
 
-export async function logEvent(requestId: string, type: string, message: string) {
-  await prisma.requestEvent.create({
-    data: {
-      requestId,
-      type,
-      message,
-    },
-  });
+export async function logEvent() {
+  return null;
 }
