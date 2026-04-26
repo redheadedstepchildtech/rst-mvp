@@ -16,10 +16,6 @@ export default async function NeedPage({ params }) {
           },
         },
       },
-      boosts: {
-        orderBy: { createdAt: "desc" },
-        take: 5,
-      },
     },
   });
 
@@ -102,27 +98,6 @@ export default async function NeedPage({ params }) {
           {need.story || "No story provided."}
         </p>
       </div>
-
-      {/* Boost Counters */}
-      <div className="mb-6 flex gap-4 text-sm">
-        <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">
-          Visibility: {need.visibilityBoost}
-        </span>
-        <span className="bg-red-100 text-red-800 px-3 py-1 rounded-full">
-          Urgency: {need.urgencyBoost}
-        </span>
-        <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full">
-          Dignity: {need.dignityBoost}
-        </span>
-      </div>
-
-      {/* Boost CTA */}
-      <Link
-        href={`/rst/needs/${need.id}/boost`}
-        className="block w-full bg-orange-600 text-white text-center py-3 rounded-lg font-semibold mb-6"
-      >
-        Boost This Need
-      </Link>
 
       {/* Share Button */}
       <ShareButton title={need.title} />
