@@ -70,19 +70,19 @@ export default async function NeedPage({ params }) {
       {/* Verified Nonprofit */}
       {/* Nonprofit verification removed for RST 1.0 */}
 
-      {/* Photo Gallery */}
-      {need.photos?.length > 0 ? (
-        <div className="grid grid-cols-2 gap-3 mb-6">
-          {need.photos.map((url) => (
-            <img
-              key={url}
-              src={url}
-              alt="Need photo"
-              className="rounded-lg object-cover w-full h-48"
-            />
-          ))}
-        </div>
-      ) : (
+      {/* Photo */}
+      {need.photoUrl ? (
+       <img
+         src={need.photoUrl}
+         alt="Need photo"
+         className="rounded-lg object-cover w-full h-64 mb-6"
+       />
+    ) : (
+  <div className="bg-gray-100 text-gray-500 p-6 rounded mb-6 text-center">
+    No photo uploaded
+  </div>
+)}
+
         <div className="bg-gray-100 text-gray-500 p-6 rounded mb-6 text-center">
           No photos uploaded
         </div>
