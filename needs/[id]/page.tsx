@@ -72,21 +72,16 @@ export default async function NeedPage({ params }) {
 
       {/* Photo */}
       {need.photoUrl ? (
-       <img
-         src={need.photoUrl}
-         alt="Need photo"
-         className="rounded-lg object-cover w-full h-64 mb-6"
-       />
-    ) : (
-  <div className="bg-gray-100 text-gray-500 p-6 rounded mb-6 text-center">
-    No photo uploaded
-  </div>
-)}
-
-        <div className="bg-gray-100 text-gray-500 p-6 rounded mb-6 text-center">
-          No photos uploaded
-        </div>
-      )}
+        <img
+          src={need.photoUrl}
+          alt="Need photo"
+          className="rounded-lg object-cover w-full h-64 mb-6"
+         />
+       ) : (
+         <div className="bg-gray-100 text-gray-500 p-6 rounded mb-6 text-center">
+           No photo uploaded
+         </div>
+       )}
 
       {/* Story */}
       <div className="mb-6">
