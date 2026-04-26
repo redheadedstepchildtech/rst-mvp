@@ -1,12 +1,6 @@
-'use server';
+// RST 1.5 FEATURE — DISABLED FOR NOW
+// Boosting will be implemented in the Swapmeet release.
 
-import { prisma } from '@/lib/prisma';
-
-export async function addBoost(needId: string) {
-  await prisma.boost.create({
-    data: {
-      needId,
-      userId: 'dev-user', // temporary
-    },
-  });
+export async function addBoost() {
+  return null;
 }
