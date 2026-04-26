@@ -12,13 +12,13 @@ export async function GET(req, { params }) {
 
   const ipHash = crypto.createHash("sha256").update(ip).digest("hex");
 
-  await prisma.qrScan.create({
+  await prisma.qRScan.create({
     data: {
       needId,
       userAgent,
       ipHash,
-    },
-  });
+   },
+ });
 
   return NextResponse.redirect(`/needs/${needId}`);
 }
