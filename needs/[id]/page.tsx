@@ -87,7 +87,7 @@ export default async function NeedPage({ params }) {
       <div className="mb-6">
         <h2 className="text-xl font-semibold mb-2">Story</h2>
         <p className="text-gray-800 whitespace-pre-wrap leading-relaxed">
-          {need.story || "No story provided."}
+          {need.description || "No story provided."}
         </p>
       </div>
 
