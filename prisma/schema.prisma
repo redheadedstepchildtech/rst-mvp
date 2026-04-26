@@ -161,6 +161,7 @@ model ReportedPhoto {
   userId    String?
   user      User?    @relation(fields: [userId], references: [id])
 
+  photoUrl  String?
   reason    String?
   notes     String?
 
