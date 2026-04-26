@@ -24,7 +24,7 @@ model User {
   orgName   String?
   name      String?
   avatarUrl String?
-  phone     String?     // ⭐ ADD THIS
+  phone     String?
 
   partnerNotes   PartnerNote[]
   partnerUploads PartnerUpload[]
@@ -71,8 +71,8 @@ model PartnerRules {
   partnerId String
   partner   User   @relation(fields: [partnerId], references: [id])
 
-  categories String? // comma-separated
-  cities     String? // comma-separated
+  categories String?
+  cities     String?
 
   createdAt DateTime @default(now())
 }
@@ -88,9 +88,9 @@ model Need {
   tags           String?
   city           String?
   state          String?
-  zip            String?        // required for browse-by-zip
-  photoUrl       String?        // required for uploaded images
-  qrUrl          String?        // required for QR posters
+  zip            String?
+  photoUrl       String?
+  qrUrl          String?
   theme          String?
   microSummary   String?
   microPlacement String?
@@ -100,6 +100,16 @@ model Need {
 
   userId         String
   user           User      @relation(fields: [userId], references: [id])
+
+  // ⭐ REQUIRED reverse relations
+  partnerNotes     PartnerNote[]
+  partnerUploads   PartnerUpload[]
+  qrScans          QRScan[]
+  boostHistory     BoostHistory[]
+  reportedPhotos   ReportedPhoto[]
+  donations        Donation[]
+  helpOffers       HelpOffer[]
+  partnerNeeds     User[]        @relation("PartnerNeeds")
 }
 
 model NotificationPreferences {
@@ -139,7 +149,7 @@ model BoostHistory {
   userId    String?
   user      User?    @relation(fields: [userId], references: [id])
 
-  type      String?   // ⭐ added field
+  type      String?
   boostedAt DateTime @default(now())
 }
 
@@ -176,7 +186,7 @@ model Donation {
   userId     String?
   user       User?    @relation(fields: [userId], references: [id])
 
-  photos     Photo[]   // ⭐ MUST be here, grouped with relations
+  photos     Photo[]
 
   amount     Float?
   donorName  String?
@@ -205,7 +215,7 @@ model HelpOffer {
   availability      String?
   contactPreference String?
 
-  photos            Photo[]  // ⭐ REQUIRED for your route
+  photos            Photo[]
 
   createdAt         DateTime @default(now())
 }
