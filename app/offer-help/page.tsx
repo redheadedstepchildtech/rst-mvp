@@ -1,9 +1,18 @@
 "use client";
 
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 export default function OfferHelpPage() {
+  return (
+    <Suspense fallback={<div>Loading…</div>}>
+      <OfferHelpContent />
+    </Suspense>
+  );
+}
+
+function OfferHelpContent() {
   const params = useSearchParams();
   const name = params.get("name") || "this person";
   const email = params.get("email") || "";
