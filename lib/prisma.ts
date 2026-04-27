@@ -1,13 +1,18 @@
 import { PrismaClient } from "@prisma/client";
+import { PrismaPostgres } from "@prisma/adapter-postgresql";
+import { Pool } from "pg";
 
-const globalForPrisma = global as unknown as {
-  prisma: PrismaClient | undefined;
-};
+const connectionString = process.env.DATABASE_URL!;
 
-export const prisma =
-  globalForPrisma.prisma ??
-  new PrismaClient({
-    log: ["query", "info", "warn", "error"],
-  });
+// Create a PG pool
+const pool = new Pool({
+  connectionString,
+});
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+// Create the Prisma adapter
+const adapter = new PrismaPostgres(pool);
+
+// Create the Prisma client with the adapter
+export const prisma = new PrismaClient({
+  adapter,
+});
