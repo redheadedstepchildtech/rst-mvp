@@ -16,8 +16,21 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={dancing.className}>
-        {/* Global Header */}
+      <body className="min-h-screen flex flex-col">
+        <main className="flex-grow">
+          {children}
+        </main>
+
+        <footer className="text-center text-xs text-gray-500 py-6">
+          © 2026 Redheaded Stepchild Tech™
+        </footer>
+      </body>
+    </html>
+  );
+}
+
+        
+       {/* Global Header */}
         <header className="p-4 bg-white shadow">
           <div className="max-w-5xl mx-auto">
             <GlobalSearch />
