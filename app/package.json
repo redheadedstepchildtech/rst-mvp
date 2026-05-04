@@ -1,5 +1,5 @@
-{
-  "name": "rhs-mvp-clean",
-  "version": "1.0.0",
-  "type": "module"
+"scripts": {
+  "dev": "next dev --no-turbo",
+  "build": "next build",
+  "start": "next start"
 }

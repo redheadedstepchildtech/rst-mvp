@@ -24,6 +24,7 @@ model User {
   name      String?
   avatarUrl String?
   phone     String?
+  zip       String?
 
   partnerNotes   PartnerNote[]
   partnerUploads PartnerUpload[]
@@ -88,28 +89,28 @@ model Need {
   city           String?
   state          String?
   zip            String?
-  photoUrl       String?   // ⭐ Keep as the “main” photo
+  photoUrl       String? // ⭐ Keep as the “main” photo
   qrUrl          String?
   theme          String?
   microSummary   String?
   microPlacement String?
   microSize      String?
-  status         String?   @default("open")
-  createdAt      DateTime  @default(now())
+  status         String?  @default("open")
+  createdAt      DateTime @default(now())
 
-  userId         String
-  user           User      @relation(fields: [userId], references: [id])
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
 
-  photos         Photo[]   // ⭐ MULTIPLE PHOTOS FOR NEED
+  photos Photo[] // ⭐ MULTIPLE PHOTOS FOR NEED
 
-  partnerNotes     PartnerNote[]
-  partnerUploads   PartnerUpload[]
-  qrScans          QRScan[]
-  boostHistory     BoostHistory[]
-  reportedPhotos   ReportedPhoto[]
-  donations        Donation[]
-  helpOffers       HelpOffer[]
-  partnerNeeds     User[]        @relation("PartnerNeeds")
+  partnerNotes   PartnerNote[]
+  partnerUploads PartnerUpload[]
+  qrScans        QRScan[]
+  boostHistory   BoostHistory[]
+  reportedPhotos ReportedPhoto[]
+  donations      Donation[]
+  helpOffers     HelpOffer[]
+  partnerNeeds   User[]          @relation("PartnerNeeds")
 }
 
 model NotificationPreferences {
@@ -142,52 +143,52 @@ model QRScan {
 }
 
 model BoostHistory {
-  id        String   @id @default(cuid())
-  needId    String
-  need      Need     @relation(fields: [needId], references: [id])
+  id     String @id @default(cuid())
+  needId String
+  need   Need   @relation(fields: [needId], references: [id])
 
-  userId    String?
-  user      User?    @relation(fields: [userId], references: [id])
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id])
 
   type      String?
   boostedAt DateTime @default(now())
 }
 
 model ReportedPhoto {
-  id        String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  needId    String
-  need      Need     @relation(fields: [needId], references: [id])
+  needId String
+  need   Need   @relation(fields: [needId], references: [id])
 
-  userId    String?
-  user      User?    @relation(fields: [userId], references: [id])
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id])
 
-  photoUrl  String?
-  reason    String?
-  notes     String?
+  photoUrl String?
+  reason   String?
+  notes    String?
 
   createdAt DateTime @default(now())
 }
 
 model AlertSubscriber {
-  id        String   @id @default(cuid())
-  name      String?
-  email     String
-  category  String?
+  id       String  @id @default(cuid())
+  name     String?
+  email    String
+  category String?
 
   createdAt DateTime @default(now())
 }
 
 model Donation {
-  id         String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  needId     String
-  need       Need     @relation(fields: [needId], references: [id])
+  needId String
+  need   Need   @relation(fields: [needId], references: [id])
 
-  userId     String?
-  user       User?    @relation(fields: [userId], references: [id])
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id])
 
-  photos     Photo[]
+  photos Photo[]
 
   amount     Float?
   donorName  String?
@@ -195,20 +196,20 @@ model Donation {
   message    String?
   story      String?
 
-  template   String?
-  photoUrl   String?
-  slug       String?
+  template String?
+  photoUrl String?
+  slug     String?
 
-  createdAt  DateTime @default(now())
+  createdAt DateTime @default(now())
 }
 
 model HelpOffer {
-  id                String   @id @default(cuid())
-  needId            String
-  need              Need     @relation(fields: [needId], references: [id])
+  id     String @id @default(cuid())
+  needId String
+  need   Need   @relation(fields: [needId], references: [id])
 
-  userId            String?
-  user              User?    @relation(fields: [userId], references: [id])
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id])
 
   title             String?
   type              String?
@@ -216,21 +217,21 @@ model HelpOffer {
   availability      String?
   contactPreference String?
 
-  photos            Photo[]
+  photos Photo[]
 
-  createdAt         DateTime @default(now())
+  createdAt DateTime @default(now())
 }
 
 model Photo {
-  id           String   @id @default(cuid())
-  url          String
+  id  String @id @default(cuid())
+  url String
 
-  helpOfferId  String?
-  helpOffer    HelpOffer? @relation(fields: [helpOfferId], references: [id])
+  helpOfferId String?
+  helpOffer   HelpOffer? @relation(fields: [helpOfferId], references: [id])
 
-  donationId   String?
-  donation     Donation?  @relation(fields: [donationId], references: [id])
+  donationId String?
+  donation   Donation? @relation(fields: [donationId], references: [id])
 
-  needId       String?        // ⭐ ADD THIS
-  need         Need? @relation(fields: [needId], references: [id])  // ⭐ ADD THIS
+  needId String? // ⭐ ADD THIS
+  need   Need?   @relation(fields: [needId], references: [id]) // ⭐ ADD THIS
 }
