@@ -1,11 +1,11 @@
-import { defineConfig } from '@prisma/config';
+import { defineConfig } from "@prisma/config";
 
 export default defineConfig({
-  schema: './prisma/schema.prisma',
-  datasource: {
+  schema: "./prisma/schema.prisma",
+  datasources: {
     db: {
-      provider: 'sqlite',
-      url: { fromEnv: 'DATABASE_URL' },
+      provider: "postgresql",
+      url: { fromEnv: "DATABASE_URL" },
     },
   },
 });
