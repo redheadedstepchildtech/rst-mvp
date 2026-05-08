@@ -25,6 +25,7 @@ model User {
   avatarUrl String?
   phone     String?
   zip       String?
+  contact   String?
 
   partnerNotes   PartnerNote[]
   partnerUploads PartnerUpload[]
