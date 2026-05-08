@@ -7,26 +7,36 @@ export default function DonateItemPage() {
   const router = useRouter();
 
   const [form, setForm] = useState({
-    title: "",
+    name: "",
+    email: "",
+    phone: "",
+    itemName: "",
+    condition: "",
     description: "",
-    donorName: "",
-    donorEmail: "",
-    message: "",
-    city: "",
-    state: "",
-    zip: "",
   });
 
-  const handleChange = (e) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const body = {
+      name: form.name,
+      email: form.email,
+      phone: form.phone,
+      itemName: form.itemName,
+      condition: form.condition,
+      description: form.description,
+    };
 
     const res = await fetch("/api/donate-item", {
       method: "POST",
-      body: JSON.stringify(form),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
     });
 
     if (res.ok) {
@@ -43,89 +53,96 @@ export default function DonateItemPage() {
       <form onSubmit={handleSubmit} className="space-y-4">
 
         <div>
-          <label className="block font-semibold mb-1">Item Title</label>
+          <label htmlFor="name" className="block font-semibold mb-1">
+            Your Name
+          </label>
           <input
+            id="name"
+            name="name"
             type="text"
-            name="title"
-            value={form.title}
+            value={form.name}
             onChange={handleChange}
             className="w-full border rounded p-2"
-            placeholder="Example: Winter coat, microwave, baby crib..."
+            placeholder="John Doe"
             required
           />
         </div>
 
         <div>
-          <label className="block font-semibold mb-1">Item Description</label>
+          <label htmlFor="email" className="block font-semibold mb-1">
+            Email
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            value={form.email}
+            onChange={handleChange}
+            className="w-full border rounded p-2"
+            placeholder="you@example.com"
+            required
+          />
+        </div>
+
+        <div>
+          <label htmlFor="phone" className="block font-semibold mb-1">
+            Phone
+          </label>
+          <input
+            id="phone"
+            name="phone"
+            type="text"
+            value={form.phone}
+            onChange={handleChange}
+            className="w-full border rounded p-2"
+            placeholder="(555) 123‑4567"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="itemName" className="block font-semibold mb-1">
+            Item Name
+          </label>
+          <input
+            id="itemName"
+            name="itemName"
+            type="text"
+            value={form.itemName}
+            onChange={handleChange}
+            className="w-full border rounded p-2"
+            placeholder="Example: Winter coat, bunk bed, stroller..."
+            required
+          />
+        </div>
+
+        <div>
+          <label htmlFor="condition" className="block font-semibold mb-1">
+            Condition
+          </label>
+          <input
+            id="condition"
+            name="condition"
+            type="text"
+            value={form.condition}
+            onChange={handleChange}
+            className="w-full border rounded p-2"
+            placeholder="New, like new, good, fair..."
+            required
+          />
+        </div>
+
+        <div>
+          <label htmlFor="description" className="block font-semibold mb-1">
+            Description
+          </label>
           <textarea
+            id="description"
             name="description"
             value={form.description}
             onChange={handleChange}
             className="w-full border rounded p-2 h-32"
-            placeholder="Describe the item, condition, and any details..."
+            placeholder="Any details about the item, size, age, etc."
             required
-          />
-        </div>
-
-        <div>
-          <label className="block font-semibold mb-1">Your Name</label>
-          <input
-            type="text"
-            name="donorName"
-            value={form.donorName}
-            onChange={handleChange}
-            className="w-full border rounded p-2"
-            placeholder="Optional"
-          />
-        </div>
-
-        <div>
-          <label className="block font-semibold mb-1">Your Email</label>
-          <input
-            type="email"
-            name="donorEmail"
-            value={form.donorEmail}
-            onChange={handleChange}
-            className="w-full border rounded p-2"
-            placeholder="Optional"
-          />
-        </div>
-
-        <div>
-          <label className="block font-semibold mb-1">Message</label>
-          <textarea
-            name="message"
-            value={form.message}
-            onChange={handleChange}
-            className="w-full border rounded p-2 h-20"
-            placeholder="Optional message to the recipient"
-          />
-        </div>
-
-        <div className="grid grid-cols-3 gap-3">
-          <input
-            type="text"
-            name="city"
-            value={form.city}
-            onChange={handleChange}
-            className="border rounded p-2"
-            placeholder="City"
-          />
-          <input
-            type="text"
-            name="state"
-            value={form.state}
-            onChange={handleChange}
-            className="border rounded p-2"
-            placeholder="State"
-          />
-          <input
-            type="text"
-            name="zip"
-            value={form.zip}
-            onChange={handleChange}
-            className="border rounded p-2"
-            placeholder="ZIP"
           />
         </div>
 

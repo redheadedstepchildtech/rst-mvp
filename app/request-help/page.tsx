@@ -15,16 +15,16 @@ export default function RequestHelpPage() {
     zip: "",
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const body = {
       title: form.title,
-      category: "general", // default category for now
+      category: "general",
       description: form.description,
       city: form.city,
       state: form.state,
@@ -32,34 +32,9 @@ export default function RequestHelpPage() {
       contact: form.contact,
     };
 
-async function handleSubmit(e: React.FormEvent) {
-  e.preventDefault();
-
-  const formData = {
-    name,
-    phone,
-    email,
-    description,
-    category,
-    urgency,
-  };
-
-  const res = await fetch("/api/request-help", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(formData),
-  });
-
-  const data = await res.json();
-
-  if (data.success) {
-    alert("Request submitted successfully");
-  } else {
-    alert("There was an error submitting your request");
-  }
-}
     const res = await fetch("/api/request-help", {
       method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
 
@@ -75,10 +50,13 @@ async function handleSubmit(e: React.FormEvent) {
       <h1 className="text-3xl font-bold">Request Help</h1>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        
+
         <div>
-          <label className="block font-semibold mb-1">What do you need?</label>
+          <label htmlFor="title" className="block font-semibold mb-1">
+            What do you need?
+          </label>
           <input
+            id="title"
             type="text"
             name="title"
             value={form.title}
@@ -90,8 +68,11 @@ async function handleSubmit(e: React.FormEvent) {
         </div>
 
         <div>
-          <label className="block font-semibold mb-1">Your story</label>
+          <label htmlFor="description" className="block font-semibold mb-1">
+            Your story
+          </label>
           <textarea
+            id="description"
             name="description"
             value={form.description}
             onChange={handleChange}
@@ -102,8 +83,11 @@ async function handleSubmit(e: React.FormEvent) {
         </div>
 
         <div>
-          <label className="block font-semibold mb-1">Contact method</label>
+          <label htmlFor="contact" className="block font-semibold mb-1">
+            Contact method
+          </label>
           <input
+            id="contact"
             type="text"
             name="contact"
             value={form.contact}
@@ -115,30 +99,50 @@ async function handleSubmit(e: React.FormEvent) {
         </div>
 
         <div className="grid grid-cols-3 gap-3">
-          <input
-            type="text"
-            name="city"
-            value={form.city}
-            onChange={handleChange}
-            className="border rounded p-2"
-            placeholder="City"
-          />
-          <input
-            type="text"
-            name="state"
-            value={form.state}
-            onChange={handleChange}
-            className="border rounded p-2"
-            placeholder="State"
-          />
-          <input
-            type="text"
-            name="zip"
-            value={form.zip}
-            onChange={handleChange}
-            className="border rounded p-2"
-            placeholder="ZIP"
-          />
+          <div>
+            <label htmlFor="city" className="block font-semibold mb-1">
+              City
+            </label>
+            <input
+              id="city"
+              type="text"
+              name="city"
+              value={form.city}
+              onChange={handleChange}
+              className="border rounded p-2 w-full"
+              placeholder="City"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="state" className="block font-semibold mb-1">
+              State
+            </label>
+            <input
+              id="state"
+              type="text"
+              name="state"
+              value={form.state}
+              onChange={handleChange}
+              className="border rounded p-2 w-full"
+              placeholder="State"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="zip" className="block font-semibold mb-1">
+              ZIP
+            </label>
+            <input
+              id="zip"
+              type="text"
+              name="zip"
+              value={form.zip}
+              onChange={handleChange}
+              className="border rounded p-2 w-full"
+              placeholder="ZIP"
+            />
+          </div>
         </div>
 
         <button
