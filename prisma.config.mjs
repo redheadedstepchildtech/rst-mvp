@@ -1,12 +1,15 @@
 import { defineConfig } from "@prisma/config";
+import dotenv from "dotenv";
+
+dotenv.config({ path: "./.env" });
 
 export default defineConfig({
   schema: "./prisma/schema.prisma",
-  dotenv: true, // REQUIRED for Prisma CLI to load .env
+  dotenv: true,
   datasources: {
     db: {
       provider: "postgresql",
-      url: { fromEnv: "DATABASE_URL" }, // REQUIRED for Prisma 5/7
+      url: { fromEnv: "DATABASE_URL" },
     },
   },
 });
