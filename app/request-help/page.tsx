@@ -32,6 +32,32 @@ export default function RequestHelpPage() {
       contact: form.contact,
     };
 
+async function handleSubmit(e: React.FormEvent) {
+  e.preventDefault();
+
+  const formData = {
+    name,
+    phone,
+    email,
+    description,
+    category,
+    urgency,
+  };
+
+  const res = await fetch("/api/request-help", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(formData),
+  });
+
+  const data = await res.json();
+
+  if (data.success) {
+    alert("Request submitted successfully");
+  } else {
+    alert("There was an error submitting your request");
+  }
+}
     const res = await fetch("/api/request-help", {
       method: "POST",
       body: JSON.stringify(body),
