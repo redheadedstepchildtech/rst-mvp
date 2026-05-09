@@ -9,7 +9,6 @@ export default function RequestHelpPage() {
   const [form, setForm] = useState({
     title: "",
     description: "",
-    contact: "",
     city: "",
     state: "",
     zip: "",
@@ -29,7 +28,6 @@ export default function RequestHelpPage() {
       city: form.city,
       state: form.state,
       zip: form.zip,
-      contact: form.contact,
     };
 
     const res = await fetch("/api/request-help", {
@@ -78,22 +76,6 @@ export default function RequestHelpPage() {
             onChange={handleChange}
             className="w-full border rounded p-2 h-32"
             placeholder="Tell us what's going on and how the community can help..."
-            required
-          />
-        </div>
-
-        <div>
-          <label htmlFor="contact" className="block font-semibold mb-1">
-            Contact method
-          </label>
-          <input
-            id="contact"
-            type="text"
-            name="contact"
-            value={form.contact}
-            onChange={handleChange}
-            className="w-full border rounded p-2"
-            placeholder="Email, phone, or preferred contact"
             required
           />
         </div>

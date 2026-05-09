@@ -6,35 +6,36 @@ export async function POST(req: Request) {
     const body = await req.json();
 
     const {
-      name,
-      email,
-      phone,
-      location,
-      description,
+      title,
       category,
-      urgent,
+      description,
+      tags,
+      city,
+      state,
+      zip,
     } = body;
 
-    const helpRequest = await prisma.helpRequest.create({
+    // TEMP USER (until auth is added)
+    const userId = "anonymous-user";
+
+    const need = await prisma.need.create({
       data: {
-        name,
-        email,
-        phone,
-        location,
-        description,
+        title,
         category,
-        urgent,
+        description: description || null,
+        tags: tags || null,
+        city: city || null,
+        state: state || null,
+        zip: zip || null,
+        userId,
       },
     });
 
+    return NextResponse.json({ ok: true, id: need.id });
+  } catch (err) {
+    console.error("Request Help Error:", err);
     return NextResponse.json(
-      { success: true, data: helpRequest },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error("Error in request-help route:", error);
-    return NextResponse.json(
-      { error: "Failed to submit help request" },
+      { error: "Server error" },
       { status: 500 }
     );
   }
