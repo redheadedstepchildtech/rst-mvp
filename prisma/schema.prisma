@@ -15,33 +15,8 @@ generator client {
 // ------------------------------------------------------
 //  USER MODEL (clean + fixed)
 // ------------------------------------------------------
-model User {
-  id        String  @id @default(cuid())
-  email     String  @unique
-  password  String
-  role      String  @default("helper")
-  orgName   String?
-  name      String?
-  avatarUrl String?
-  phone     String?
-  zip       String?
-  contact   String?
-
-  partnerNotes   PartnerNote[]
-  partnerUploads PartnerUpload[]
-  boostHistory   BoostHistory[]
-  reportedPhotos ReportedPhoto[]
-  donations      Donation[]
-  helpOffers     HelpOffer[]
-
-  needs        Need[]
-  partnerNeeds Need[]         @relation("PartnerNeeds")
-  partnerRules PartnerRules[]
-
-  createdAt               DateTime                 @default(now())
-  notificationPreferences NotificationPreferences?
-}
-
+model Need {
+  
 model PartnerNote {
   id     String @id @default(cuid())
   needId String
@@ -86,11 +61,12 @@ model Need {
   title          String
   category       String
   description    String?
+  contact        String?
   tags           String?
   city           String?
   state          String?
   zip            String?
-  photoUrl       String? // ⭐ Keep as the “main” photo
+  photoUrl       String?
   qrUrl          String?
   theme          String?
   microSummary   String?
@@ -102,7 +78,7 @@ model Need {
   userId String
   user   User   @relation(fields: [userId], references: [id])
 
-  photos Photo[] // ⭐ MULTIPLE PHOTOS FOR NEED
+  photos Photo[]
 
   partnerNotes   PartnerNote[]
   partnerUploads PartnerUpload[]
