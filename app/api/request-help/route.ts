@@ -5,6 +5,8 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
+    console.log("BODY RECEIVED:", body);
+
     const {
       title,
       category,
