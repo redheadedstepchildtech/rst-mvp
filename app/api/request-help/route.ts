@@ -1,6 +1,23 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
+// --- ADD THIS FUNCTION AT THE TOP ---
+async function createNeedWithRetry(data, retries = 3) {
+  try {
+    return await prisma.need.create({ data });
+  } catch (err) {
+    console.log("Prisma createNeed failed, retries left:", retries, err);
+
+    if (retries > 0) {
+      await new Promise((res) => setTimeout(res, 2000)); // wait 2 seconds
+      return createNeedWithRetry(data, retries - 1);
+    }
+
+    throw err;
+  }
+}
+// ------------------------------------
+
 export async function POST(req: Request) {
   try {
     const body = await req.json();
@@ -19,17 +36,16 @@ export async function POST(req: Request) {
 
     const userId = "anonymous-user";
 
-    const need = await prisma.need.create({
-      data: {
-        title,
-        category,
-        description: description || null,
-        tags: tags || null,
-        city: city || null,
-        state: state || null,
-        zip: zip || null,
-        userId,
-      },
+    // --- USE THE RETRY WRAPPER HERE ---
+    const need = await createNeedWithRetry({
+      title,
+      category,
+      description: description || null,
+      tags: tags || null,
+      city: city || null,
+      state: state || null,
+      zip: zip || null,
+      userId,
     });
 
     return NextResponse.json({ ok: true, id: need.id });
