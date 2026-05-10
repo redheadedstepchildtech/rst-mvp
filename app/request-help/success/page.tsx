@@ -1,24 +1,50 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import Toast from "@/components/Toast";
 
-export default function SuccessPage() {
+export default function RequestHelpSuccess() {
+  const [showToast, setShowToast] = useState(true);
 
   useEffect(() => {
-    console.log("Success page loaded");
+    const timer = setTimeout(() => setShowToast(false), 3000);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
-    <div className="p-6 text-center">
-      <h1 className="text-2xl font-bold mb-4">Success!</h1>
+    <div className="max-w-xl mx-auto p-6 space-y-4 text-center">
+      {showToast && (
+        <Toast
+          message="Request submitted successfully!"
+          onClose={() => setShowToast(false)}
+        />
+      )}
 
-      <p>Your request has been submitted.</p>
+      <h1 className="text-3xl font-bold text-green-700">Request Submitted</h1>
+      <p className="text-gray-700">
+        Your request for help has been received. Someone from the community will
+        reach out if they can assist.
+      </p>
+
+      <a
+        href="/request-help"
+        className="inline-block mt-4 text-blue-600 underline hover:text-blue-800"
+      >
+        Submit another request
+      </a>
 
       <a
         href="/donate-item"
-        className="inline-block mt-4 text-blue-600 underline hover:text-blue-800"
+        className="inline-block mt-2 text-blue-600 underline hover:text-blue-800"
       >
         Submit another donation
+      </a>
+
+      <a
+        href="/"
+        className="inline-block mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+      >
+        Return Home
       </a>
     </div>
   );
