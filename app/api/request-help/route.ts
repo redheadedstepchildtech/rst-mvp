@@ -15,7 +15,6 @@ export async function POST(req: Request) {
       zip,
     } = body;
 
-    // TEMP USER (until auth is added)
     const userId = "anonymous-user";
 
     const need = await prisma.need.create({
