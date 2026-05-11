@@ -34,7 +34,7 @@ export async function POST(req: Request) {
       zip,
     } = body;
 
-    const userId = "anonymous-user";
+    const userId = "9a5087d5-108f-4a31-a199-64ad6e9cb9e6";
 
     // --- USE THE RETRY WRAPPER HERE ---
     const need = await createNeedWithRetry({
