@@ -1,35 +1,12 @@
-import { useEffect, useState } from "react";
-import { Donation } from "@/types";
-import ItemDetailPhotos from "./ItemDetailPhotos";
-import ItemDetailInfo from "./ItemDetailInfo";
-import ItemDetailActions from "./ItemDetailActions";
-
-interface Props {
-  id: string;
-}
-
-export default function ItemDetailPage({ id }: Props) {
-  const [item, setItem] = useState<Donation | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetch(`/api/donations`)
-      .then((res) => res.json())
-      .then((data) => {
-        const found = data.find((d: Donation) => d.id === id);
-        setItem(found || null);
-        setLoading(false);
-      });
-  }, [id]);
-
-  if (loading) return <p>Loading...</p>;
-  if (!item) return <p>Item not found.</p>;
-
+export default function ItemDetailPage() {
+  // SwapMeet item details are part of RST 2.0 — placeholder for now
   return (
-    <div className="item-detail-container">
-      <ItemDetailPhotos photos={item.photos} />
-      <ItemDetailInfo item={item} />
-      <ItemDetailActions item={item} />
+    <div className="swap-container">
+      <h1 className="text-2xl font-bold mb-4">Item Details</h1>
+
+      <p className="text-gray-600">
+        The Swap‑Meet marketplace will be available in RST 2.0.
+      </p>
     </div>
   );
 }
