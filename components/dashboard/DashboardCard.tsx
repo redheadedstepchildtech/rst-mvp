@@ -15,16 +15,11 @@ export default function DashboardCard({ item, type, onDelete, onUpdate }: Props)
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  // Shared fields
-  const [title, setTitle] = useState(item.title);
-  const [description, setDescription] = useState(item.description || "");
-
-  // Donation-only
-  const [category, setCategory] = useState(
-    type === "donation" ? (item as Donation).category : ""
+  // Help-offer editable fields
+  const [title, setTitle] = useState(type === "help-offer" ? (item as HelpOffer).title : "");
+  const [description, setDescription] = useState(
+    type === "help-offer" ? (item as HelpOffer).description || "" : ""
   );
-
-  // Help-offer-only
   const [offerType, setOfferType] = useState(
     type === "help-offer" ? (item as HelpOffer).type : ""
   );
@@ -38,28 +33,18 @@ export default function DashboardCard({ item, type, onDelete, onUpdate }: Props)
   const thumbnail = item.photos?.[0]?.url;
 
   const handleSave = async () => {
+    if (type !== "help-offer") return; // Donations are not editable
+
     setSaving(true);
 
-    let url = "";
-    let payload = {};
-
-    if (type === "donation") {
-      url = `/api/donations/${item.id}`;
-      payload = {
-        title,
-        category,
-        description,
-      };
-    } else {
-      url = `/api/help-offers/${item.id}`;
-      payload = {
-        title,
-        type: offerType,
-        description,
-        availability,
-        contactPreference,
-      };
-    }
+    const url = `/api/help-offers/${item.id}`;
+    const payload = {
+      title,
+      type: offerType,
+      description,
+      availability,
+      contactPreference,
+    };
 
     const res = await fetch(url, {
       method: "PATCH",
@@ -90,65 +75,60 @@ export default function DashboardCard({ item, type, onDelete, onUpdate }: Props)
       {thumbnail && !editing && (
         <img
           src={thumbnail}
-          alt={item.title}
+          alt={type === "help-offer" ? (item as HelpOffer).title : "Donation"}
           className="w-full h-40 object-cover rounded mb-3"
         />
       )}
 
-      {editing ? (
+      {editing && type === "help-offer" ? (
         <div className="space-y-2">
           <input
             className="border rounded w-full px-2 py-1"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            placeholder="Title"
           />
 
           <textarea
             className="border rounded w-full px-2 py-1"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+            placeholder="Description"
           />
 
-          {type === "donation" && (
-            <input
-              className="border rounded w-full px-2 py-1"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-            />
-          )}
+          <input
+            className="border rounded w-full px-2 py-1"
+            value={offerType}
+            onChange={(e) => setOfferType(e.target.value)}
+            placeholder="Type of help"
+          />
 
-          {type === "help-offer" && (
-            <>
-              <input
-                className="border rounded w-full px-2 py-1"
-                value={offerType}
-                onChange={(e) => setOfferType(e.target.value)}
-                placeholder="Type of help"
-              />
+          <input
+            className="border rounded w-full px-2 py-1"
+            value={availability}
+            onChange={(e) => setAvailability(e.target.value)}
+            placeholder="Availability"
+          />
 
-              <input
-                className="border rounded w-full px-2 py-1"
-                value={availability}
-                onChange={(e) => setAvailability(e.target.value)}
-                placeholder="Availability"
-              />
-
-              <input
-                className="border rounded w-full px-2 py-1"
-                value={contactPreference}
-                onChange={(e) => setContactPreference(e.target.value)}
-                placeholder="Contact preference"
-              />
-            </>
-          )}
+          <input
+            className="border rounded w-full px-2 py-1"
+            value={contactPreference}
+            onChange={(e) => setContactPreference(e.target.value)}
+            placeholder="Contact preference"
+          />
         </div>
       ) : (
         <>
-          <h3 className="font-semibold text-lg">{item.title}</h3>
+          <h3 className="font-semibold text-lg">
+            {type === "help-offer"
+              ? (item as HelpOffer).title
+              : "Monetary Donation"}
+          </h3>
+
           <p className="text-sm text-gray-600 capitalize">
-            {type === "donation"
-              ? (item as Donation).category
-              : (item as HelpOffer).type}
+            {type === "help-offer"
+              ? (item as HelpOffer).type
+              : "Donation Record"}
           </p>
         </>
       )}
@@ -164,12 +144,14 @@ export default function DashboardCard({ item, type, onDelete, onUpdate }: Props)
               View
             </Link>
 
-            <button
-              onClick={() => setEditing(true)}
-              className="bg-gray-200 px-4 py-2 rounded"
-            >
-              Edit
-            </button>
+            {type === "help-offer" && (
+              <button
+                onClick={() => setEditing(true)}
+                className="bg-gray-200 px-4 py-2 rounded"
+              >
+                Edit
+              </button>
+            )}
 
             <button
               onClick={handleDelete}
@@ -180,7 +162,7 @@ export default function DashboardCard({ item, type, onDelete, onUpdate }: Props)
           </>
         )}
 
-        {editing && (
+        {editing && type === "help-offer" && (
           <>
             <button
               onClick={handleSave}
@@ -193,18 +175,13 @@ export default function DashboardCard({ item, type, onDelete, onUpdate }: Props)
             <button
               onClick={() => {
                 setEditing(false);
-                setTitle(item.title);
-                setDescription(item.description || "");
-
-                if (type === "donation") {
-                  setCategory((item as Donation).category);
-                } else {
-                  setOfferType((item as HelpOffer).type);
-                  setAvailability((item as HelpOffer).availability);
-                  setContactPreference(
-                    (item as HelpOffer).contactPreference
-                  );
-                }
+                setTitle((item as HelpOffer).title);
+                setDescription((item as HelpOffer).description || "");
+                setOfferType((item as HelpOffer).type);
+                setAvailability((item as HelpOffer).availability);
+                setContactPreference(
+                  (item as HelpOffer).contactPreference
+                );
               }}
               className="bg-gray-200 px-4 py-2 rounded"
             >
@@ -215,4 +192,3 @@ export default function DashboardCard({ item, type, onDelete, onUpdate }: Props)
       </div>
     </div>
   );
-}

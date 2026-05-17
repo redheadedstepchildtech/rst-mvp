@@ -1,67 +1,74 @@
-export default function DonationPage({ params }) {
-  // Later: fetch donation data using params.id
-  const data = {
-    name: "Dave Reynolds",
-    category: "Legal Help",
-    story: "My daughters called the cops on me and I need help with a lawyer.",
-    payoutMethod: "Cash App",
-    photoUrl: "/placeholder.jpg", // replace with real uploaded photo
-  };
+import { notFound } from "next/navigation";
+import { prisma } from "@/lib/prisma"; // adjust if your prisma path is different
+import { useState } from "react";
+
+export default async function DonationPage({ params }: { params: { id: string } }) {
+  const profileId = params.id;
+
+  // Load the profile from your database
+  const profile = await prisma.profile.findUnique({
+    where: { id: profileId }
+  });
+
+  if (!profile) {
+    notFound();
+  }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex justify-center p-4">
-      <div className="max-w-xl w-full bg-white shadow-lg rounded-xl p-6 space-y-6">
+    <DonationClient profile={profile} />
+  );
+}
 
-        {/* HEADER */}
-        <h1 className="text-3xl font-bold text-red-700 text-center">
-          {data.name} Needs Your Help
-        </h1>
+// Client component for interactivity
+function DonationClient({ profile }: { profile: any }) {
+  const [amount, setAmount] = useState("5.00");
+  const [loading, setLoading] = useState(false);
 
-        {/* PHOTO */}
-        {data.photoUrl && (
-          <img
-            src={data.photoUrl}
-            alt="Donation"
-            className="w-full h-64 object-cover rounded-lg border"
-          />
-        )}
+  async function handleDonate() {
+    setLoading(true);
 
-        {/* CATEGORY */}
-        <div>
-          <h2 className="text-lg font-semibold text-gray-800">Category</h2>
-          <p className="text-gray-700">{data.category}</p>
-        </div>
+    const res = await fetch("/api/create-checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        profileId: profile.id,
+        amountDollars: amount
+      })
+    });
 
-        {/* STORY */}
-        <div>
-          <h2 className="text-lg font-semibold text-gray-800">Story</h2>
-          <p className="text-gray-700 whitespace-pre-line">{data.story}</p>
-        </div>
+    const data = await res.json();
+    window.location.href = data.url;
+  }
 
-        {/* DONATE BUTTON */}
-        <button className="w-full bg-red-600 text-white py-3 rounded-lg text-lg font-semibold">
-          Donate Now
-        </button>
+  return (
+    <div className="max-w-lg mx-auto mt-16 p-6 bg-white rounded-xl shadow-lg text-black">
+      <h1 className="text-3xl font-bold mb-4 text-center">
+        Donate to {profile.name}
+      </h1>
 
-        {/* QR CODE (placeholder for now) */}
-        <div className="text-center">
-          <p className="text-gray-600 mb-2">Scan to donate</p>
-          <div className="w-32 h-32 bg-gray-300 mx-auto rounded-lg"></div>
-        </div>
+      <p className="text-gray-700 mb-6 text-center">
+        {profile.greeting || "Your support makes a difference."}
+      </p>
 
-        {/* SHARE BUTTON */}
-        <button
-          className="w-full bg-gray-800 text-white py-3 rounded-lg text-lg font-semibold"
-          onClick={() => navigator.clipboard.writeText(window.location.href)}
-        >
-          Copy Link to Share
-        </button>
+      <label className="block mb-4">
+        <span className="text-gray-800 font-semibold">Donation Amount ($)</span>
+        <input
+          type="number"
+          step="0.01"
+          min="1"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+          className="mt-2 w-full p-3 border rounded-lg"
+        />
+      </label>
 
-        {/* FOOTER */}
-        <p className="text-center text-sm text-gray-500">
-          Powered by Redheaded Stepchild Tech
-        </p>
-      </div>
+      <button
+        onClick={handleDonate}
+        disabled={loading}
+        className="w-full py-3 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700"
+      >
+        {loading ? "Redirecting…" : "Donate with Stripe"}
+      </button>
     </div>
   );
 }
