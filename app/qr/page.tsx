@@ -13,7 +13,6 @@ export default function QRGeneratorPage() {
   async function handleCreateProfile() {
     setLoading(true);
 
-    // 1. Create profile in your database via API route
     const res = await fetch("/api/create-profile", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -24,7 +23,6 @@ export default function QRGeneratorPage() {
     const id = data.profileId;
     setProfileId(id);
 
-    // 2. Generate QR code pointing to donation page
     const donationUrl = `${window.location.origin}/donation/${id}`;
     const qr = await QRCode.toDataURL(donationUrl);
     setQrDataUrl(qr);
@@ -74,7 +72,7 @@ export default function QRGeneratorPage() {
           <img src={qrDataUrl} alt="QR Code" className="mx-auto mb-6" />
 
           <p className="text-gray-700 mb-4">
-            This QR links to:  
+            This QR links to:
             <br />
             <span className="font-mono text-sm">{`${window.location.origin}/donation/${profileId}`}</span>
           </p>
