@@ -15,7 +15,7 @@ generator client {
 // ------------------------------------------------------
 //  USER MODEL (clean + fixed)
 // ------------------------------------------------------
-model Need {
+model Need 
   
 model PartnerNote {
   id     String @id @default(cuid())
@@ -186,7 +186,15 @@ model Donation {
 
   createdAt DateTime @default(now())
 }
-
+model MonetaryDonation {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  category  String
+  message   String?
+  slug      String   @unique
+  createdAt DateTime @default(now())
+}
 model HelpOffer {
   id     String @id @default(cuid())
   needId String
