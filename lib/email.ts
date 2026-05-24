@@ -1,12 +1,16 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+export const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function sendEmail(to: string, subject: string, html: string) {
-  await resend.emails.send({
-    from: "RST <notifications@rst.local>",
-    to,
-    subject,
-    html,
-  });
+  try {
+    await resend.emails.send({
+      from: "RST <noreply@rst-tech.org>",
+      to,
+      subject,
+      html,
+    });
+  } catch (err) {
+    console.error("Email error:", err);
+  }
 }

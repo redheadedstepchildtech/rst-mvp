@@ -1,42 +1,34 @@
 import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    // Required fields
-    if (!body.title || !body.category || !body.description) {
-      return NextResponse.json(
-        { error: "Missing required fields" },
-        { status: 400 }
-      );
-    }
+    const {
+      title,
+      category,
+      description,
+      tags,
+      city,
+      state,
+      zip,
+    } = body;
 
-    // TEMP USER (until auth is added)
-    const userId = body.userId || "anonymous-user";
+    const userId = "9a5087d5-108f-4a31-a199-64ad6e9cb9e6";
 
-    // Create the Need record
     const need = await prisma.need.create({
       data: {
-  title: body.title,
-  category: body.category,
-  description: body.description,
-  tags: body.tags || "",
-  city: body.city || "",
-  state: body.state || "",
-  zip: body.zip || "",
-  contact: body.contact || "",
-  photoUrl: body.photoUrl || null,
-  theme: body.theme || null,
-  microSummary: body.microSummary || null,
-  microPlacement: body.microPlacement || null,
-  microSize: body.microSize || null,
-  userId: userId,
-},
+        title,
+        category,
+        description: description || null,
+        tags: tags || null,
+        city: city || null,
+        state: state || null,
+        zip: zip || null,
+        userId,
+      },
     });
-
-    console.log("New Need Created:", need.id);
 
     return NextResponse.json({ ok: true, id: need.id });
   } catch (err) {

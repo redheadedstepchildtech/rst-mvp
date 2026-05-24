@@ -11,85 +11,82 @@ generator client {
   provider = "prisma-client-js"
 }
 
-//
-// ------------------------------------------------------
-//  USER MODEL (clean + fixed)
-// ------------------------------------------------------
 model User {
-  id        String  @id @default(cuid())
-  email     String  @unique
-  password  String
-  role      String  @default("helper")
-  orgName   String?
+  id        String   @id @default(cuid())
+  email     String   @unique
   name      String?
-  avatarUrl String?
-  phone     String?
-  zip       String?
+  createdAt DateTime @default(now())
 
-  partnerNotes   PartnerNote[]
-  partnerUploads PartnerUpload[]
-  boostHistory   BoostHistory[]
-  reportedPhotos ReportedPhoto[]
-  donations      Donation[]
-  helpOffers     HelpOffer[]
-
-  needs        Need[]
-  partnerNeeds Need[]         @relation("PartnerNeeds")
-  partnerRules PartnerRules[]
-
-  createdAt               DateTime                 @default(now())
+  // Relations
+  needs                   Need[]
+  partnerNotes            PartnerNote[]
+  partnerUploads          PartnerUpload[]
+  partnerRules            PartnerRules[]
   notificationPreferences NotificationPreferences?
+  qrScans                 QRScan[]
+  boostHistory            BoostHistory[]
+  reportedPhotos          ReportedPhoto[]
+  donations               Donation[]
+  helpOffers              HelpOffer[]
+  partnerNeeds            Need[]                   @relation("PartnerNeeds")
 }
 
+// ------------------------------------------------------
+//  PARTNER + PROFILE MODELS
+// ------------------------------------------------------
+
 model PartnerNote {
-  id     String @id @default(cuid())
-  needId String
-  need   Need   @relation(fields: [needId], references: [id])
-
+  id        String   @id @default(cuid())
+  needId    String
+  need      Need     @relation(fields: [needId], references: [id])
   partnerId String
-  partner   User   @relation(fields: [partnerId], references: [id])
-
+  partner   User     @relation(fields: [partnerId], references: [id])
   note      String
   createdAt DateTime @default(now())
 }
 
 model PartnerUpload {
-  id     String @id @default(cuid())
-  needId String
-  need   Need   @relation(fields: [needId], references: [id])
-
+  id        String   @id @default(cuid())
+  needId    String
+  need      Need     @relation(fields: [needId], references: [id])
   partnerId String
-  partner   User   @relation(fields: [partnerId], references: [id])
-
+  partner   User     @relation(fields: [partnerId], references: [id])
   fileUrl   String
   fileName  String
   createdAt DateTime @default(now())
 }
 
 model PartnerRules {
-  id        String @id @default(cuid())
-  partnerId String
-  partner   User   @relation(fields: [partnerId], references: [id])
-
+  id         String   @id @default(cuid())
+  partnerId  String
+  partner    User     @relation(fields: [partnerId], references: [id])
   categories String?
   cities     String?
+  createdAt  DateTime @default(now())
+}
 
+model Profile {
+  id        String   @id @default(cuid())
+  name      String
+  greeting  String?
   createdAt DateTime @default(now())
 }
 
 // ------------------------------------------------------
-//  NEED MODEL (clean + fixed)
+//  NEED MODEL (correct + complete)
 // ------------------------------------------------------
+
 model Need {
   id             String   @id @default(cuid())
   title          String
   category       String
   description    String?
+  contact        String?
   tags           String?
   city           String?
   state          String?
   zip            String?
-  photoUrl       String? // ⭐ Keep as the “main” photo
+  photoUrl       String?
   qrUrl          String?
   theme          String?
   microSummary   String?
@@ -101,8 +98,7 @@ model Need {
   userId String
   user   User   @relation(fields: [userId], references: [id])
 
-  photos Photo[] // ⭐ MULTIPLE PHOTOS FOR NEED
-
+  photos         Photo[]
   partnerNotes   PartnerNote[]
   partnerUploads PartnerUpload[]
   qrScans        QRScan[]
@@ -113,125 +109,129 @@ model Need {
   partnerNeeds   User[]          @relation("PartnerNeeds")
 }
 
+// ------------------------------------------------------
+//  OTHER MODELS
+// ------------------------------------------------------
+
 model NotificationPreferences {
-  id     String @id @default(cuid())
-  userId String @unique
-  user   User   @relation(fields: [userId], references: [id])
-
-  notifyOnBoost  Boolean @default(true)
-  notifyOnCreate Boolean @default(true)
-  notifyOnVerify Boolean @default(true)
-
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id])
+  notifyOnBoost  Boolean  @default(true)
+  notifyOnCreate Boolean  @default(true)
+  notifyOnVerify Boolean  @default(true)
   categoryFilter String?
   cityFilter     String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
 model QRScan {
-  id     String @id @default(cuid())
-  needId String
-  need   Need   @relation(fields: [needId], references: [id])
-
+  id        String   @id @default(cuid())
+  needId    String
+  need      Need     @relation(fields: [needId], references: [id])
   scannedAt DateTime @default(now())
   userAgent String?
   ipHash    String?
   city      String?
   state     String?
   country   String?
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?
 }
 
 model BoostHistory {
-  id     String @id @default(cuid())
-  needId String
-  need   Need   @relation(fields: [needId], references: [id])
-
-  userId String?
-  user   User?   @relation(fields: [userId], references: [id])
-
+  id        String   @id @default(cuid())
+  needId    String
+  need      Need     @relation(fields: [needId], references: [id])
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
   type      String?
   boostedAt DateTime @default(now())
 }
 
 model ReportedPhoto {
-  id String @id @default(cuid())
-
-  needId String
-  need   Need   @relation(fields: [needId], references: [id])
-
-  userId String?
-  user   User?   @relation(fields: [userId], references: [id])
-
-  photoUrl String?
-  reason   String?
-  notes    String?
-
+  id        String   @id @default(cuid())
+  needId    String
+  need      Need     @relation(fields: [needId], references: [id])
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  photoUrl  String?
+  reason    String?
+  notes     String?
   createdAt DateTime @default(now())
 }
 
 model AlertSubscriber {
-  id       String  @id @default(cuid())
-  name     String?
-  email    String
-  category String?
-
+  id        String   @id @default(cuid())
+  name      String?
+  email     String
+  category  String?
   createdAt DateTime @default(now())
 }
 
+// ------------------------------------------------------
+//  OLD DONATION MODEL (RST 2.0)
+// ------------------------------------------------------
+
 model Donation {
-  id String @id @default(cuid())
-
-  needId String
-  need   Need   @relation(fields: [needId], references: [id])
-
-  userId String?
-  user   User?   @relation(fields: [userId], references: [id])
-
-  photos Photo[]
-
+  id         String   @id @default(cuid())
+  needId     String
+  need       Need     @relation(fields: [needId], references: [id])
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id])
+  photos     Photo[]
   amount     Float?
   donorName  String?
   donorEmail String?
   message    String?
   story      String?
+  template   String?
+  photoUrl   String?
+  slug       String?
+  createdAt  DateTime @default(now())
+}
 
-  template String?
-  photoUrl String?
-  slug     String?
+// ------------------------------------------------------
+//  NEW MONETARY DONATION MODEL (RST 1.0)
+// ------------------------------------------------------
 
+model MonetaryDonation {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  category  String
+  message   String?
+  slug      String   @unique
   createdAt DateTime @default(now())
 }
 
+// ------------------------------------------------------
+//  HELP OFFER + PHOTO MODELS
+// ------------------------------------------------------
+
 model HelpOffer {
-  id     String @id @default(cuid())
-  needId String
-  need   Need   @relation(fields: [needId], references: [id])
-
-  userId String?
-  user   User?   @relation(fields: [userId], references: [id])
-
+  id                String   @id @default(cuid())
+  needId            String
+  need              Need     @relation(fields: [needId], references: [id])
+  userId            String?
+  user              User?    @relation(fields: [userId], references: [id])
   title             String?
   type              String?
   description       String?
   availability      String?
   contactPreference String?
-
-  photos Photo[]
-
-  createdAt DateTime @default(now())
+  photos            Photo[]
+  createdAt         DateTime @default(now())
 }
 
 model Photo {
-  id  String @id @default(cuid())
-  url String
-
+  id          String     @id @default(cuid())
+  url         String
   helpOfferId String?
   helpOffer   HelpOffer? @relation(fields: [helpOfferId], references: [id])
-
-  donationId String?
-  donation   Donation? @relation(fields: [donationId], references: [id])
-
-  needId String? // ⭐ ADD THIS
-  need   Need?   @relation(fields: [needId], references: [id]) // ⭐ ADD THIS
+  donationId  String?
+  donation    Donation?  @relation(fields: [donationId], references: [id])
+  needId      String?
+  need        Need?      @relation(fields: [needId], references: [id])
 }

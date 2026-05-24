@@ -15,14 +15,18 @@ export default function DonateItemPage() {
     description: "",
   });
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     const body = {
       name: form.name,
@@ -33,31 +37,31 @@ export default function DonateItemPage() {
       description: form.description,
     };
 
-    const res = await fetch("/api/donate-item", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
+    try {
+      const res = await fetch("/api/donate-item", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
 
-    if (res.ok) {
-      router.push("/donate-item/success");
-    } else {
-      alert("There was an error submitting your donation.");
+      if (res.ok) {
+        router.push("/donate-item/success");
+      } else {
+        console.error("Failed to submit donation");
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="max-w-xl mx-auto p-6 space-y-6">
+    <div className="max-w-xl mx-auto p-6 space-y-6 animate-fadeIn">
       <h1 className="text-3xl font-bold">Donate an Item</h1>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-
         <div>
-          <label htmlFor="name" className="block font-semibold mb-1">
-            Your Name
-          </label>
+          <label className="block font-semibold mb-1">Your Name</label>
           <input
-            id="name"
             name="name"
             type="text"
             value={form.name}
@@ -69,11 +73,8 @@ export default function DonateItemPage() {
         </div>
 
         <div>
-          <label htmlFor="email" className="block font-semibold mb-1">
-            Email
-          </label>
+          <label className="block font-semibold mb-1">Email</label>
           <input
-            id="email"
             name="email"
             type="email"
             value={form.email}
@@ -85,11 +86,8 @@ export default function DonateItemPage() {
         </div>
 
         <div>
-          <label htmlFor="phone" className="block font-semibold mb-1">
-            Phone
-          </label>
+          <label className="block font-semibold mb-1">Phone</label>
           <input
-            id="phone"
             name="phone"
             type="text"
             value={form.phone}
@@ -100,27 +98,21 @@ export default function DonateItemPage() {
         </div>
 
         <div>
-          <label htmlFor="itemName" className="block font-semibold mb-1">
-            Item Name
-          </label>
+          <label className="block font-semibold mb-1">Item Name</label>
           <input
-            id="itemName"
             name="itemName"
             type="text"
             value={form.itemName}
             onChange={handleChange}
             className="w-full border rounded p-2"
-            placeholder="Example: Winter coat, bunk bed, stroller..."
+            placeholder="Winter coat, bunk bed, stroller..."
             required
           />
         </div>
 
         <div>
-          <label htmlFor="condition" className="block font-semibold mb-1">
-            Condition
-          </label>
+          <label className="block font-semibold mb-1">Condition</label>
           <input
-            id="condition"
             name="condition"
             type="text"
             value={form.condition}
@@ -132,11 +124,8 @@ export default function DonateItemPage() {
         </div>
 
         <div>
-          <label htmlFor="description" className="block font-semibold mb-1">
-            Description
-          </label>
+          <label className="block font-semibold mb-1">Description</label>
           <textarea
-            id="description"
             name="description"
             value={form.description}
             onChange={handleChange}
@@ -148,9 +137,14 @@ export default function DonateItemPage() {
 
         <button
           type="submit"
-          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
+          disabled={isSubmitting}
+          className={`px-4 py-2 rounded text-white w-full ${
+            isSubmitting
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-700"
+          }`}
         >
-          Submit Donation
+          {isSubmitting ? "Submitting..." : "Submit"}
         </button>
       </form>
     </div>
